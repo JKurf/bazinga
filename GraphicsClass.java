@@ -50,6 +50,8 @@ public class GraphicsClass {
 
     public void Update() {
         frame.repaint();
+
+        //System.out.println;
     }
 
     public void DrawSquare() {
