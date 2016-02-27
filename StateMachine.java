@@ -10,7 +10,7 @@ public class StateMachine {
         mCurrentState.Update(elapsedTime);
     }
 
-    public void Render(Graphics graphics)
+    public void Render(GraphicsClass graphics)
     {
         mCurrentState.Render(graphics);
     }

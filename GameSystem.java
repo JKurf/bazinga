@@ -1,8 +1,10 @@
 //import "Graphics"
 
+import java.io.IOException;
+
 public class GameSystem {
 
-    Graphics graphics = new Graphics();
+    GraphicsClass graphics = new GraphicsClass();
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
@@ -26,7 +28,12 @@ public class GameSystem {
     public void Init() {
         SM.Add("Menu", menu);
         SM.Change("Menu", new String[]{"A", "B"});
-        graphics.Init();
+        try {
+            graphics.Init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public Boolean Update() {

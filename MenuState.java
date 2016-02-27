@@ -4,7 +4,7 @@ public class MenuState implements IState {
     public void Update(float elapsedTime) {
     }
 
-    public void Render(Graphics graphics) {
+    public void Render(GraphicsClass graphics) {
     }
 
     public void OnEnter(String[] params) {
