@@ -18,14 +18,6 @@ public class InputClass implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        /*
-        for(int i = 0; i < 255; i ++) {
-
-            keyStates[i] = (e.getKeyCode() == i);
-            //System.out.print(keyStates[i] + " ");
-        }
-        //System.out.println("");
-        */
         keyStates[e.getKeyCode()] = true;
 
     }
