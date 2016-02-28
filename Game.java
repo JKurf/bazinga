@@ -2,28 +2,12 @@
 
 import java.io.IOException;
 
-public class GameSystem {
+public class Game {
 
     GraphicsClass graphics = new GraphicsClass();
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
-
-    public static void main(String[] args){
-        GameSystem Game = new GameSystem();
-
-        Game.Init();
-
-        Boolean done = false;
-
-        while (!done) {
-            done = Game.Update();
-
-            Game.Render();
-        }
-
-        Game.Quit();
-    }
 
     public void Init() {
         SM.Add("Menu", menu);
