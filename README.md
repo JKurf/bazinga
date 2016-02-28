@@ -10,3 +10,9 @@ World Class was created that allows for the storage of map data in the WorldFile
 A GraphicsClass was created in order to display the Map BMP to the screen
 A TileMap was created, with a null tile and some wooden tiles
 Entity Class was created to keep track of entity positions, name, and ID
+
+***28 FEB 2016***
+Figured out the weird rectangle issue
+Printed TestMap to the screen via the GraphicsClass
+Found a way to run image with unlocked frame-rate without flickering
+Error popping up where the bufferGraphics will close but the actual graphics will not

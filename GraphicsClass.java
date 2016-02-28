@@ -13,6 +13,7 @@ public class GraphicsClass extends JFrame{
     BufferedImage backBuffer;
 
     Graphics2D g2d;
+    Graphics bufferImage;
 
     boolean loaded = false;
 
@@ -35,10 +36,14 @@ public class GraphicsClass extends JFrame{
     /**
      * Initialize the GraphicsClass
      */
-    public void Init() {
+    public void Init(boolean buffer) {
         setSize(600, 600);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if (!buffer) {
+            setVisible(true);
+            setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        } else {
+            setVisible(false);
+        }
 
         content = Toolkit.getDefaultToolkit();
 
@@ -117,7 +122,7 @@ public class GraphicsClass extends JFrame{
         DrawWorld(backBuffer.getGraphics());
 
         spriteBatch.drawImage(backBuffer, 0, 0, this);
-        //g.drawImage(backBuffer, 0, 0, this);
+        g.drawImage(backBuffer, 0, 0, this);
     }
 
     /**
@@ -131,7 +136,7 @@ public class GraphicsClass extends JFrame{
      * Flip the buffers, Render to screen
      */
     public void Render() {
-        paint(this.getGraphics());
+        paint(backBuffer.getGraphics());
     }
 
     /**

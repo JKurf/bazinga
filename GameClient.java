@@ -11,16 +11,19 @@ public class GameClient implements Runnable {
         Thread gameLoop = new Thread(this);
         game.Init();
         Boolean done = false;
+        int frames = 0;
         while (!done) {
             done = game.Update();
             game.Render();
 
+            /*
             try {
-                gameLoop.sleep(32);
+                gameLoop.sleep(16);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Frame");
+            */
+            System.out.printf("\nFrame %d", frames++);
 
         }
         game.Quit();
