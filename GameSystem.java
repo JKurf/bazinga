@@ -43,6 +43,7 @@ public class GameSystem {
 
     public void Render() {
         SM.Render(graphics);
+        graphics.Update();
         graphics.DrawSquare();
     }
 
