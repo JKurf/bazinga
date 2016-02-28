@@ -1,13 +1,11 @@
 //#bangpoundben
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class Game extends JFrame implements KeyListener {
+public class Game {
 
-    GraphicsClass graphics = new GraphicsClass(this);
+    GraphicsClass graphics = new GraphicsClass("Awesome-Title");
+    InputClass input = new InputClass();
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
@@ -17,12 +15,8 @@ public class Game extends JFrame implements KeyListener {
     boolean finished = false;
 
     public Game() {
-        super("Awesome Title");
-        addKeyListener(this);
-    }
-
-    public void paint(Graphics g) {
-        graphics.paint(g);
+        graphics.addKeyListener(input);
+        System.out.println(KeyEvent.VK_Q);
     }
 
     public void Init() {
@@ -33,6 +27,10 @@ public class Game extends JFrame implements KeyListener {
     }
 
     public Boolean Update() {
+        if(input.keyStates[KeyEvent.VK_Q]) {
+            finished = true;
+        }
+
         SM.Update(0.0f);
         return finished;
     }
@@ -46,22 +44,5 @@ public class Game extends JFrame implements KeyListener {
         SM.Quit();
         graphics.Quit();
         System.out.println("Quitso");
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        if(e.getKeyChar() == 'q') {
-            finished = true;
-        }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }
