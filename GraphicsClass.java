@@ -31,17 +31,27 @@ public class GraphicsClass {
 
         image = ImageIO.read(new File("Data/TestImg.png"));
 
-        pane = new JPanel(){
+        /*pane = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.drawImage(image, 0,0, null);
+            }
+        };*/
+
+        pane = drawImg(image, 0, 0);
+        frame.add(pane);
+    }
+
+    public JPanel drawImg(BufferedImage img, int x ,int y) {
+        JPanel scrn = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(img, x, y, null);
             }
         };
 
-        System.out.println("ayy");
-
-        frame.add(pane);
+        return scrn;
     }
 
     public void Quit() {
@@ -49,9 +59,8 @@ public class GraphicsClass {
     }
 
     public void Update() {
+        frame.validate();
         frame.repaint();
-
-        //System.out.println;
     }
 
     public void DrawSquare() {
