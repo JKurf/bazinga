@@ -1,14 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 
-public class GraphicsClass {
+public class GraphicsClass extends JFrame{
     private Image spriteSheet;
     AffineTransform identity = new AffineTransform();
     Toolkit content;
     World currentWorld;
-    JFrame frame;
+
+    BufferedImage backBuffer;
+
+    Graphics2D g2d;
 
     boolean loaded = false;
 
@@ -20,20 +24,26 @@ public class GraphicsClass {
     /**
      * Default Constructor
      */
-    public GraphicsClass(JFrame Frame) {
-        //super("Game");
-        frame = Frame;
+    public GraphicsClass() {
+        super("Game");
+    }
+
+    public GraphicsClass(String Title) {
+        super(Title);
     }
 
     /**
      * Initialize the GraphicsClass
      */
     public void Init() {
-        frame.setSize(600, 600);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(600, 600);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         content = Toolkit.getDefaultToolkit();
+
+        backBuffer = new BufferedImage(this.getHeight(),this.getWidth(), BufferedImage.TYPE_INT_RGB);
+        g2d = backBuffer.createGraphics();
     }
 
     /**
@@ -50,8 +60,6 @@ public class GraphicsClass {
      */
     public void setWorld(World world) {
         currentWorld = world;
-        //System.out.println("Loaded!");
-        //System.out.println(world.cols + "  " + world.rows);
 
         LoadSpriteSheet("Data/TileMap.png");
         //LoadSpriteSheet("Data/" + world.name + "_Tilemap.png");
@@ -63,26 +71,28 @@ public class GraphicsClass {
      * Draw the current world to the back buffer
      * @param g Graphics2d Interface
      */
-    public void DrawWorld(Graphics2D g) {
+    public void DrawWorld(Graphics g) {
         if(loaded) {
             for (int j = 0; j < currentWorld.rows; j++) {
                 for (int i = 0; i < currentWorld.cols; i++) {
-                    int drawx = i * TILE_WIDTH;
-                    int drawy = j * TILE_HEIGHT;
-                    int ID = currentWorld.map[j][i];
-                    int sheetx = ID % SPRITESHEET_WIDTH;
-                    int sheety = (ID / SPRITESHEET_HEIGHT);
-
                     final int renderOffsetX = 8;
                     final int renderOffsetY = 31;
                     int xOffset = 0;
                     int yOffset = 0;
+
+
+                    int drawx = i * TILE_WIDTH + renderOffsetX + xOffset;
+                    int drawy = j * TILE_HEIGHT + renderOffsetY + yOffset;
+                    int ID = currentWorld.map[j][i];
+                    int sheetx = ID % SPRITESHEET_WIDTH;
+                    int sheety = (ID / SPRITESHEET_HEIGHT);
+
                     g.drawImage(spriteSheet,
-                            renderOffsetX + drawx, renderOffsetY + drawy,                           //Screen Top Left corner
-                            renderOffsetX+TILE_WIDTH + drawx, renderOffsetY+TILE_HEIGHT + drawy,    //Screen Bot Right corner
+                            drawx, drawy,                           //Screen Top Left corner
+                            TILE_WIDTH + drawx, TILE_HEIGHT + drawy,    //Screen Bot Right corner
                             sheetx*TILE_WIDTH, sheety*TILE_HEIGHT,                                  //Tilemap Top Left corner
                             sheetx*TILE_WIDTH + TILE_WIDTH, sheety*TILE_HEIGHT + TILE_HEIGHT,       //Tilemap Bot Right corner
-                            frame);
+                            this);
                 }
             }
         }
@@ -97,28 +107,31 @@ public class GraphicsClass {
 
         Graphics2D spriteBatch = (Graphics2D)g;
 
-        spriteBatch.setColor(Color.BLUE);
-        spriteBatch.fillRect(0, 0, frame.getSize().width, frame.getSize().height);
+        spriteBatch.setColor(Color.BLACK);
+        spriteBatch.fillRect(0, 0, this.getSize().width, this.getSize().height);
 
         transform.setTransform(identity);
         transform.translate(8, 31); //Origin
         //spriteBatch.drawImage(image, transform, this);
 
-        DrawWorld(spriteBatch);
+        DrawWorld(backBuffer.getGraphics());
+
+        spriteBatch.drawImage(backBuffer, 0, 0, this);
+        //g.drawImage(backBuffer, 0, 0, this);
     }
 
     /**
      * Quit everything cleanly
      */
     public void Quit() {
-        frame.dispose();
+        this.dispose();
     }
 
     /**
      * Flip the buffers, Render to screen
      */
     public void Render() {
-        paint(this.frame.getGraphics());
+        paint(this.getGraphics());
     }
 
     /**
