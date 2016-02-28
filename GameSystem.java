@@ -28,11 +28,11 @@ public class GameSystem {
     public void Init() {
         SM.Add("Menu", menu);
         SM.Change("Menu", new String[]{"A", "B"});
-        try {
+        //try {
             graphics.Init();
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
@@ -43,8 +43,7 @@ public class GameSystem {
 
     public void Render() {
         SM.Render(graphics);
-        graphics.Update();
-        graphics.DrawSquare();
+        graphics.Render();
     }
 
     public void Quit() {
