@@ -9,6 +9,8 @@ public class GameSystem {
 
     MenuState menu = new MenuState();
 
+    World mainWorld;
+
     public static void main(String[] args){
         GameSystem Game = new GameSystem();
 
@@ -28,17 +30,16 @@ public class GameSystem {
     public void Init() {
         SM.Add("Menu", menu);
         SM.Change("Menu", new String[]{"A", "B"});
-        //try {
-            graphics.Init();
-        /*} catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        graphics.Init();
 
+        mainWorld = new World("TestMap");
+
+        graphics.setWorld(mainWorld);
     }
 
     public Boolean Update() {
         SM.Update(0.0f);
-        return true;
+        return false;
     }
 
     public void Render() {

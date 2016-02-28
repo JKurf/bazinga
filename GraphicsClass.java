@@ -6,18 +6,32 @@ import java.util.Random;
 
 public class GraphicsClass extends JFrame {
     private Image image;
+    private Image spriteSheet;
     AffineTransform identity = new AffineTransform();
+    Toolkit content;
+    World currentWorld;
+
+    Random rand;
+
+    boolean loaded = false;
+
+    final int SPRITE_HEIGHT = 16;
+    final int SPRITE_WIDTH = 16;
+    final int SPRITESHEET_HEIGHT = 25;
+    final int SPRITESHEET_WIDTH = 25;
 
     public GraphicsClass() {
         super("Game");
 
-        setSize(640, 480);
+        setSize(600, 600);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Toolkit content = Toolkit.getDefaultToolkit();
+        content = Toolkit.getDefaultToolkit();
 
         image = content.getImage(getURL("Data/TestImg.png"));
+
+        rand = new Random();
     }
 
     private URL getURL(String filename) {
@@ -25,22 +39,53 @@ public class GraphicsClass extends JFrame {
 
         try {
             url = this.getClass().getResource(filename);
-        } catch (Exception e){}
+        } catch (Exception e) {}
 
         return url;
     }
+    public void LoadSpriteSheet(String filename) {
+        spriteSheet = this.content.getImage(getURL(filename));
+    }
+    public void setWorld(World world) {
+        currentWorld = world;
+        System.out.println("Loaded!");
+        System.out.println(world.cols + "  " + world.rows);
+        loaded = true;
+    }
 
+    /**
+     *
+     * @param g
+     */
+    public void DrawWorld(Graphics2D g) {
+        //world.loadSpriteSheet();
+        if(loaded) {
+            for (int j = 0; j < currentWorld.rows; j++) {
+                for (int i = 0; i < currentWorld.cols; i++) {
+                    //drawImage(tile[x][y]);
+                    int drawx = j * SPRITE_HEIGHT;
+                    int drawy = i * SPRITE_WIDTH;
+                    int ID = currentWorld.map[j][i];
+                    int sheetx = ID % SPRITESHEET_WIDTH;
+                    int sheety = (int) (ID / SPRITESHEET_WIDTH);
+
+                    g.drawImage(image, 0, 0, 16, 16, 16, 0, 32, 16, null);
+
+                    System.out.printf("(%d,%d)\t", sheety, sheety);
+                }
+                System.out.println();
+            }
+        }
+    }
     public void paint(Graphics g) {
         AffineTransform transform = new AffineTransform();
-
-        Random rand = new Random();
 
         Graphics2D spriteBatch = (Graphics2D)g;
 
         spriteBatch.setColor(Color.BLACK);
         spriteBatch.fillRect(0, 0, getSize().width, getSize().height);
 
-        for(int i = 0; i < 50; i++) {
+        /*for(int i = 0; i < 50; i++) {
             transform.setTransform(identity);
 
             transform.translate(
@@ -49,21 +94,31 @@ public class GraphicsClass extends JFrame {
 
             transform.rotate(Math.toRadians(360 * rand.nextDouble()));
 
-            double scale = rand.nextDouble()+1;
-            transform.scale(scale, scale);
-
             spriteBatch.drawImage(image, transform, this);
-        }
+        }*/
+
+        transform.setTransform(identity);
+        transform.translate(1, 31);
+
+        //transform.rotate(Math.toRadians(360 * rand.nextDouble()));
+
+        //spriteBatch.drawImage(image, 0, 0, 16, 16, 0, 0, 16, 16, this);
+        //spriteBatch.drawImage(image, transform, this);
+        //transform.translate(0,16);
+        //spriteBatch.drawImage(image, transform, this);
+
+        spriteBatch.drawImage(image, 0, 31, 31, 63, 0, 0, 16, 16, this);
+
+        //DrawWorld(spriteBatch);
     }
 
     public void Render() {
-
+        //repaint();
+        //validate();
     }
-
     public void Init() {
 
     }
-
     public void Quit() {
 
     }
