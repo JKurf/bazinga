@@ -13,7 +13,11 @@ public class GraphicsClass extends JFrame{
     BufferedImage backBuffer;
 
     Graphics2D g2d;
-    Graphics bufferImage;
+
+    final int renderOffsetX = 8;
+    final int renderOffsetY = 31;
+    int xOffset = 16;
+    int yOffset = 16;
 
     boolean loaded = false;
 
@@ -77,14 +81,9 @@ public class GraphicsClass extends JFrame{
      * @param g Graphics2d Interface
      */
     public void DrawWorld(Graphics g) {
-        if(loaded) {
+        if(true) {
             for (int j = 0; j < currentWorld.rows; j++) {
                 for (int i = 0; i < currentWorld.cols; i++) {
-                    final int renderOffsetX = 8;
-                    final int renderOffsetY = 31;
-                    int xOffset = 0;
-                    int yOffset = 0;
-
 
                     int drawx = i * TILE_WIDTH + renderOffsetX + xOffset;
                     int drawy = j * TILE_HEIGHT + renderOffsetY + yOffset;
@@ -120,6 +119,9 @@ public class GraphicsClass extends JFrame{
         //spriteBatch.drawImage(image, transform, this);
 
         DrawWorld(backBuffer.getGraphics());
+        //backBuffer.getScaledInstance(2*TILE_WIDTH, 2*TILE_HEIGHT, 0);
+
+        backBuffer.getGraphics().drawString("Lmao", 8, 41);
 
         spriteBatch.drawImage(backBuffer, 0, 0, this);
         g.drawImage(backBuffer, 0, 0, this);
@@ -130,6 +132,7 @@ public class GraphicsClass extends JFrame{
      */
     public void Quit() {
         this.dispose();
+        System.out.println("Quitting");
     }
 
     /**

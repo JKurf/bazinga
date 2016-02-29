@@ -29,7 +29,7 @@ public class Game {
         graphics.setWorld(mainWorld);
     }
 
-    public Boolean Update() {
+    public Boolean Update(double elapsedTime) {
         if(input.keyStates[KeyEvent.VK_Q]) {
             finished = true;
         }
