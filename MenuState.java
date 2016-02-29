@@ -3,7 +3,7 @@ import java.awt.event.KeyEvent;
 public class MenuState implements IState {
 
     @Override
-    public void Init() {
+    public void Init(GraphicsClass graphics) {
 
     }
 

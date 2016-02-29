@@ -60,7 +60,7 @@ public class GraphicsClass extends JFrame{
      * @param filename SpriteSheet filename
      */
     private void LoadSpriteSheet(String filename) {
-        spriteSheet = this.content.getImage(getURL(filename));
+        spriteSheet = loadImage(filename);
     }
 
     /**
@@ -144,7 +144,7 @@ public class GraphicsClass extends JFrame{
      * @param filename resource file
      * @return Path to file
      */
-    private URL getURL(String filename) {
+    public URL getURL(String filename) {
         URL url = null;
 
         try {
@@ -154,5 +154,9 @@ public class GraphicsClass extends JFrame{
         }
 
         return url;
+    }
+
+    public Image loadImage(String filename) {
+        return this.content.getImage(getURL(filename));
     }
 }
