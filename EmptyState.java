@@ -3,7 +3,7 @@ import java.awt.event.KeyEvent;
 public class EmptyState implements IState {
 
     @Override
-    public void Init() {
+    public void Init(GraphicsClass graphics) {
 
     }
 

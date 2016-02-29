@@ -4,8 +4,9 @@ public class WorldState implements IState{
     World world;
 
     @Override
-    public void Init() {
-
+    public void Init(GraphicsClass graphics) {
+        world = new World("TestMap");
+        graphics.setWorld(world);
     }
 
     @Override
@@ -15,7 +16,7 @@ public class WorldState implements IState{
 
     @Override
     public void Render(GraphicsClass graphics) {
-
+        
     }
 
     @Override

@@ -1,7 +1,7 @@
 import java.awt.event.KeyEvent;
 
 interface IState {
-    void Init();
+    void Init(GraphicsClass graphics);
     void Update(float elapsedTime);
     void Render(GraphicsClass graphics);
     void OnEnter(String[] params);
