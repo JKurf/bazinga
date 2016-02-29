@@ -1,6 +1,7 @@
 import java.awt.event.KeyEvent;
 
-public class EmptyState implements IState {
+public class WorldState implements IState{
+    World world;
 
     @Override
     public void Init() {
