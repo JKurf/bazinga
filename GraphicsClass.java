@@ -8,7 +8,7 @@ public class GraphicsClass extends JFrame{
     private Image spriteSheet;
     AffineTransform identity = new AffineTransform();
     Toolkit content;
-    World currentWorld;
+    World currentWorld = null;
 
     BufferedImage backBuffer;
 
@@ -78,10 +78,9 @@ public class GraphicsClass extends JFrame{
 
     /**
      * Draw the current world to the back buffer
-     * @param g Graphics2d Interface
      */
-    public void DrawWorld(Graphics g) {
-        if(true) {
+    public void DrawWorld() {
+        if(currentWorld != null) {
             for (int j = 0; j < currentWorld.rows; j++) {
                 for (int i = 0; i < currentWorld.cols; i++) {
 
@@ -91,7 +90,7 @@ public class GraphicsClass extends JFrame{
                     int sheetx = ID % SPRITESHEET_WIDTH;
                     int sheety = (ID / SPRITESHEET_HEIGHT);
 
-                    g.drawImage(spriteSheet,
+                    backBuffer.getGraphics().drawImage(spriteSheet,
                             drawx, drawy,                           //Screen Top Left corner
                             TILE_WIDTH + drawx, TILE_HEIGHT + drawy,    //Screen Bot Right corner
                             sheetx*TILE_WIDTH, sheety*TILE_HEIGHT,                                  //Tilemap Top Left corner
@@ -111,20 +110,18 @@ public class GraphicsClass extends JFrame{
 
         Graphics2D spriteBatch = (Graphics2D)g;
 
+        transform.setTransform(identity);
+        transform.translate(8, 31); //Origin
+
+        //spriteBatch.setColor(Color.BLACK);
+        //spriteBatch.fillRect(0, 0, this.getSize().width, this.getSize().height);
         spriteBatch.setColor(Color.BLACK);
         spriteBatch.fillRect(0, 0, this.getSize().width, this.getSize().height);
 
-        transform.setTransform(identity);
-        transform.translate(8, 31); //Origin
-        //spriteBatch.drawImage(image, transform, this);
+        DrawWorld();
 
-        DrawWorld(backBuffer.getGraphics());
-        //backBuffer.getScaledInstance(2*TILE_WIDTH, 2*TILE_HEIGHT, 0);
-
-        backBuffer.getGraphics().drawString("Lmao", 8, 41);
-
+        spriteBatch.drawString("Lmao", 8, 41);
         spriteBatch.drawImage(backBuffer, 0, 0, this);
-        g.drawImage(backBuffer, 0, 0, this);
     }
 
     /**
