@@ -16,3 +16,6 @@ Figured out the weird rectangle issue
 Printed TestMap to the screen via the GraphicsClass
 Found a way to run image with unlocked frame-rate without flickering
 Error popping up where the bufferGraphics will close but the actual graphics will not
+
+***29 FEB 2016***
+Player Class Added

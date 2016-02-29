@@ -1,14 +1,12 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
 
 public class InputClass implements KeyListener {
-    boolean keyStates[];
+    boolean[] keyStates = new boolean[255];
 
     public InputClass() {
-        keyStates = new boolean[255];
-        for(int i = 0; i < 255; i++) {
-            keyStates[i] = false;
-        }
+        Arrays.fill(keyStates, Boolean.FALSE);
     }
 
     @Override

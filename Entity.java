@@ -77,7 +77,7 @@ public class Entity {
      * This Method will call the Entity's Name
      * @return Name
      */
-    public String getName() {
+    public String getEntityName() {
         return name;
     }
 
