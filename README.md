@@ -19,3 +19,7 @@ Error popping up where the bufferGraphics will close but the actual graphics wil
 
 ***29 FEB 2016***
 Player Class Added
+Began the process of converting graphics from Java2D to JavaSDL
+Created Interface GraphicsClass
+Renamed (old) GraphicsClass to GraphicsClass_Java2D that implements GraphicsClass
+Added GraphicsClass_SDL that implements GraphicsClass

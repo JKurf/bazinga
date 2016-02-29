@@ -4,8 +4,9 @@ import java.awt.event.KeyEvent;
 
 public class Game {
 
-    GraphicsClass graphics = new GraphicsClass("Awesome-Title");
-    //GraphicsClass bufferGraphics = new GraphicsClass("Buffer");
+    GraphicsClass_Java2D graphics = new GraphicsClass_Java2D("Awesome-Title");
+    //GraphicsClass_SDL graphics = new GraphicsClass_SDL("Awesome-Title");
+
     InputClass input = new InputClass();
     StateMachine SM = new StateMachine();
 
@@ -27,7 +28,7 @@ public class Game {
 
         //bufferGraphics.Init(true);
         //bufferGraphics.setWorld(mainWorld);
-        graphics.Init(false);
+        graphics.Init();
         graphics.setWorld(mainWorld);
     }
 
