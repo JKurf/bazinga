@@ -12,7 +12,7 @@ public class StateMachine {
 
     public void Render(GraphicsClass graphics)
     {
-        mCurrentState.Render(graphics);
+        //mCurrentState.Render(graphics);
     }
 
     public void Change(String stateName, String[] params)
