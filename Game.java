@@ -6,12 +6,13 @@ public class Game {
 
     //GraphicsClass_Java2D graphics = new GraphicsClass_Java2D("Awesome-Title");
     GraphicsClass graphics = new GraphicsClass();
+    Player player = new Player("Dave", "0");
 
     InputClass input = new InputClass();
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
-    WorldState World1 = new WorldState("TestMap");
+    WorldState World1 = new WorldState("Map2");
 
     boolean finished = false;
 
@@ -30,6 +31,8 @@ public class Game {
         //bufferGraphics.setWorld(mainWorld);
         graphics.Init();
         //graphics.setWorld(mainWorld);
+
+        player.loadTexture("Data/TestImg.png", graphics.textureLoader);
     }
 
     public Boolean Update(double elapsedTime) {
@@ -45,6 +48,8 @@ public class Game {
         graphics.clearScreen();
 
         SM.Render(graphics);
+        graphics.drawEntity(player);
+        graphics.drawPoints(new Location[] {new Location(50, 50), new Location(100, 100)});
 
         graphics.updateScreen();
     }
