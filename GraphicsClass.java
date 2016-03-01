@@ -2,38 +2,39 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-/**
- * Created by graf on 2/29/2016.
- */
 public class GraphicsClass {
     /*
-    private Image spriteSheet;
-    AffineTransform identity = new AffineTransform();
-    Toolkit content;
-    World currentWorld = null;
-
-    BufferedImage backBuffer;
-
-    Graphics2D g2d;
-
     final int renderOffsetX = 8;
     final int renderOffsetY = 31;
     int xOffset = 16;
     int yOffset = 16;
+    */
 
-    boolean loaded = false;
+    World currentWorld = new World("TestMap");
 
     final int TILE_HEIGHT = 16;
     final int TILE_WIDTH = 16;
-    final int SPRITESHEET_HEIGHT = 25;
-    final int SPRITESHEET_WIDTH = 25;
-    */
 
+    int TileMap_WIDTH;
+    int TileMap_HEIGHT;
+    int TileMap_NUM_TILES_X;
+    int TileMap_NUM_TILES_Y;
+
+
+    final int WIDTH = 300;
+    final int HEIGHT = 300;
+
+    Texture texture;
+    Texture TileMap;
+    TextureLoader textureLoader;
 
     // We need to strongly reference callback instances.
     private GLFWErrorCallback errorCallback;
@@ -57,9 +58,6 @@ public class GraphicsClass {
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
-
-        int WIDTH = 300;
-        int HEIGHT = 300;
 
         // Create the window
         window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
@@ -95,41 +93,123 @@ public class GraphicsClass {
         GL.createCapabilities();
 
         glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+
+        glEnable(GL11.GL_TEXTURE_2D);
+
+        // disable the OpenGL depth test since we're rendering 2D graphics
+        glDisable(GL11.GL_DEPTH_TEST);
+
+        glMatrixMode(GL11.GL_PROJECTION);
+        glLoadIdentity();
+
+        GL11.glOrtho(0, 300, 300, 0, -1, 1);
+
+        textureLoader = new TextureLoader();
+
+        try {
+            texture = textureLoader.getTexture("Data/TestImg.png");
+            TileMap = textureLoader.getTexture("Data/TileMap.png");
+
+            TileMap_WIDTH = TileMap.getImageWidth();
+            TileMap_HEIGHT = TileMap.getImageHeight();
+            TileMap_NUM_TILES_X = TileMap_WIDTH / TILE_WIDTH;
+            TileMap_NUM_TILES_Y= TileMap_HEIGHT / TILE_HEIGHT;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    /*
-    public void DrawWorld() {
-        if(currentWorld != null) {
-            for (int j = 0; j < currentWorld.rows; j++) {
-                for (int i = 0; i < currentWorld.cols; i++) {
+    public void draw(int sx1, int sy1, int sx2, int sy2,
+                     int x, int y, int w, int h, Texture tex) {
 
-                    int drawx = i * TILE_WIDTH + renderOffsetX + xOffset;
-                    int drawy = j * TILE_HEIGHT + renderOffsetY + yOffset;
-                    int ID = currentWorld.map[j][i];
-                    int sheetx = ID % SPRITESHEET_WIDTH;
-                    int sheety = (ID / SPRITESHEET_HEIGHT);
+        float u1 = (float)sx1 / getPow2(tex.getImageWidth());
+        float v1 = (float)sy1 / getPow2(tex.getImageHeight());
+        float u2 = (float)sx2 / getPow2(tex.getImageWidth());
+        float v2 = (float)sy2 / getPow2(tex.getImageHeight());
 
-                    backBuffer.getGraphics().drawImage(spriteSheet,
-                            drawx, drawy,                           //Screen Top Left corner
-                            TILE_WIDTH + drawx, TILE_HEIGHT + drawy,    //Screen Bot Right corner
-                            sheetx*TILE_WIDTH, sheety*TILE_HEIGHT,                                  //Tilemap Top Left corner
-                            sheetx*TILE_WIDTH + TILE_WIDTH, sheety*TILE_HEIGHT + TILE_HEIGHT,       //Tilemap Bot Right corner
-                            this);
-                }
+        // store the current model matrix
+        glPushMatrix();
+
+        // bind to the appropriate texture for this sprite
+        tex.bind();
+
+        // translate to the right location and prepare to draw
+        glTranslatef(x, y, 0);
+        glColor3f(1,1,1);
+
+        // draw a quad textured to match the sprite
+        glBegin(GL11.GL_QUADS);
+        {
+            glTexCoord2f(u1, v1);       //uv
+            glVertex2f(0, 0);               //xy
+            glTexCoord2f(u1, v2);       //uv
+            glVertex2f(0, h);              //xy
+            glTexCoord2f(u2, v2);       //uv
+            glVertex2f(w, h);             //xy
+            glTexCoord2f(u2, v1);       //uv
+            glVertex2f(w,0);               //xy
+        }
+        GL11.glEnd();
+
+        /*
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(0, 0);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(0, height);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(width,height);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(width,0);
+        */
+
+        // restore the model view matrix to prevent contamination
+        GL11.glPopMatrix();
+    }
+
+    private int getPow2(int n) {
+        int ret = 2;
+        while (ret < n) {
+            ret *= 2;
+        }
+        return ret;
+    }
+
+
+    public void drawWorld(World world) {
+        for (int j = 0; j < world.rows; j++) {
+            for (int i = 0; i < world.cols; i++) {
+
+                int drawx = i * TILE_WIDTH;
+                int drawy = j * TILE_HEIGHT;
+                int ID = world.map[j][i];
+                int sheetx = (ID % TileMap_NUM_TILES_X) * TILE_WIDTH;
+                int sheety = (ID / TileMap_NUM_TILES_Y) * TILE_HEIGHT;
+
+                draw(sheetx, sheety, sheetx + TILE_WIDTH, sheety + TILE_HEIGHT,
+                        drawx, drawy, TILE_WIDTH, TILE_HEIGHT, TileMap);
             }
         }
     }
-    */
+
 
     public void Render() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+        //clearScreen();
 
+        drawWorld(currentWorld);
+
+        //updateScreen();
+    }
+
+    public void clearScreen() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+    }
+
+    public void updateScreen() {
         glfwSwapBuffers(window); // swap the color buffers
 
         // Poll for window events. The key callback above will only be
         // invoked during this call.
         glfwPollEvents();
-
     }
 
     public void Quit() {

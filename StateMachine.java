@@ -2,17 +2,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StateMachine {
-    Map<String, IState> mStates = new HashMap<String, IState>();
+    Map<String, IState> mStates = new HashMap();
     IState mCurrentState = new EmptyState();
 
-    public void Update(float elapsedTime)
+    public void Update(double elapsedTime)
     {
         mCurrentState.Update(elapsedTime);
     }
 
     public void Render(GraphicsClass graphics)
     {
-        //mCurrentState.Render(graphics);
+        mCurrentState.Render(graphics);
+    }
+
+    public void Change(String stateName)
+    {
+        mCurrentState.OnExit();
+        mCurrentState = mStates.get(stateName);
+        mCurrentState.OnEnter(new String[] {""});
     }
 
     public void Change(String stateName, String[] params)
