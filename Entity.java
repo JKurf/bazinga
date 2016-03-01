@@ -4,11 +4,11 @@ import java.util.Scanner;
 
 public class Entity {
 
+    private static int entityCount = 0;
+    private int entityNumber;
     private String name; //Entity's Name
     private String ID; //Entity's ID
-    private int x; //Entity's X-Coordinate
-    private int y; //Entity's Y-Coordinate
-    private String dir; //Entity's Direction
+    Location location;
 
     //Constructor if nothing (Defaults to TestEntity)
     public Entity() {
@@ -32,10 +32,9 @@ public class Entity {
      * @param y Y-Coordinate
      */
     public Entity(String ID, int x, int y, String dir) {
+        this.entityNumber = entityCount++;
         this.ID = ID;
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
+        this.location = new Location(x, y, dir);
         String line;
         File file = new File("Data/Entities.txt");
         try {
@@ -47,30 +46,6 @@ public class Entity {
         } catch (FileNotFoundException e) {
             System.out.printf("\nEntity File not Found\n");
         }
-    }
-
-    /**
-     * This Method will call the Entity's X-Coordinate
-     * @return Current X-Coordinate
-     */
-    public int xPos() {
-        return x;
-    }
-
-    /**
-     * This Method will call the Entity's Y-Coordinate
-     * @return Current Y-Coordinate
-     */
-    public int yPos() {
-        return y;
-    }
-
-    /**
-     * This Method will call the Entity's Direction
-     * @return Current Direction
-     */
-    public String direction() {
-        return dir;
     }
 
     /**
@@ -89,27 +64,11 @@ public class Entity {
         return ID;
     }
 
-    /**
-     * This Method will update the Entity for movement
-     * @param direction The direction in which the Entity is facing
-     */
-    public void move(String direction) {
-        if (dir.equals(direction.toUpperCase())) {
-            switch (direction.toUpperCase()) {
-                case "U":
-                    y++;
-                    break;
-                case "D":
-                    y--;
-                    break;
-                case "R":
-                    x++;
-                    break;
-                case "L":
-                    x--;
-                    break;
-            }
-        }
-        dir = direction.toUpperCase();
+    public int getEntityNumber() {
+        return entityNumber;
+    }
+
+    public static int getEntityCount() {
+        return entityCount;
     }
 }
