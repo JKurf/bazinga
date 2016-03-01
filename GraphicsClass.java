@@ -18,19 +18,19 @@ public class GraphicsClass {
     int yOffset = 16;
     */
 
+    Camera camera = new Camera();
+
     World currentWorld = new World("TestMap");
 
-    final int TILE_HEIGHT = 16;
-    final int TILE_WIDTH = 16;
+    static final int TILE_HEIGHT = 16;
+    static final int TILE_WIDTH = 16;
+    static final int WIDTH = 320*2;
+    static final int HEIGHT = 320*2;
 
     int TileMap_WIDTH;
     int TileMap_HEIGHT;
     int TileMap_NUM_TILES_X;
     int TileMap_NUM_TILES_Y;
-
-
-    final int WIDTH = 300;
-    final int HEIGHT = 300;
 
     Texture texture;
     Texture TileMap;
@@ -102,7 +102,7 @@ public class GraphicsClass {
         glMatrixMode(GL11.GL_PROJECTION);
         glLoadIdentity();
 
-        GL11.glOrtho(0, 300, 300, 0, -1, 1);
+        GL11.glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
 
         textureLoader = new TextureLoader();
 
@@ -117,6 +117,9 @@ public class GraphicsClass {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        camera.x = 50;
+        camera.y = 50;
     }
 
     public void draw(int sx1, int sy1, int sx2, int sy2,
@@ -151,17 +154,6 @@ public class GraphicsClass {
         }
         GL11.glEnd();
 
-        /*
-        GL11.glTexCoord2f(0, 0);
-        GL11.glVertex2f(0, 0);
-        GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(0, height);
-        GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(width,height);
-        GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(width,0);
-        */
-
         // restore the model view matrix to prevent contamination
         GL11.glPopMatrix();
     }
@@ -179,8 +171,9 @@ public class GraphicsClass {
         for (int j = 0; j < world.rows; j++) {
             for (int i = 0; i < world.cols; i++) {
 
-                int drawx = i * TILE_WIDTH;
-                int drawy = j * TILE_HEIGHT;
+                int drawx = (i * TILE_WIDTH) + WIDTH/2 - camera.x;//  + (-camera.trueX) + camera.w/2;
+                int drawy = (j * TILE_HEIGHT) + HEIGHT/2 - camera.y;// + (-camera.trueY) + camera.h/2;
+
                 int ID = world.map[j][i];
                 int sheetx = (ID % TileMap_NUM_TILES_X) * TILE_WIDTH;
                 int sheety = (ID / TileMap_NUM_TILES_Y) * TILE_HEIGHT;
@@ -189,6 +182,44 @@ public class GraphicsClass {
                         drawx, drawy, TILE_WIDTH, TILE_HEIGHT, TileMap);
             }
         }
+    }
+
+    public void drawPoints(Location[] pts) {
+        // store the current model matrix
+        glPushMatrix();
+
+        // translate to the right location and prepare to draw
+        glTranslatef(0, 0, 0);
+        glColor3f(1,1,1);
+
+        glEnable(GL_ALPHA_TEST);
+        glAlphaFunc(GL_NOTEQUAL, 0);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable( GL_POINT_SMOOTH );
+        glPointSize( 8.0f );
+
+        // draw a quad textured to match the sprite
+        glBegin(GL11.GL_POINTS);
+        {
+            for (int n = 0; n < pts.length; n ++) {
+                glVertex2f(pts[n].xPos(), pts[n].yPos());
+            }
+        }
+        GL11.glEnd();
+
+        glDisable(GL_POINT_SMOOTH);
+        glBlendFunc(GL_NONE, GL_NONE);
+        glDisable(GL_BLEND);
+        glDisable(GL_ALPHA_TEST);
+
+        // restore the model view matrix to prevent contamination
+        GL11.glPopMatrix();
+
+    }
+
+    public void drawEntity(Entity ent) {
+        draw(0, 0, 16, 16, ent.location.xPos(), ent.location.yPos(), 16, 16, ent.tex);
     }
 
 

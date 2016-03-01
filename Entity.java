@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Entity {
@@ -9,6 +10,8 @@ public class Entity {
     private String name; //Entity's Name
     private String ID; //Entity's ID
     Location location;
+
+    Texture tex;
 
     //Constructor if nothing (Defaults to TestEntity)
     public Entity() {
@@ -45,6 +48,15 @@ public class Entity {
             }
         } catch (FileNotFoundException e) {
             System.out.printf("\nEntity File not Found\n");
+        }
+    }
+
+    public void loadTexture(String filename, TextureLoader texLoad) {
+
+        try {
+            tex = texLoad.getTexture(filename);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
