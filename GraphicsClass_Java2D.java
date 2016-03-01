@@ -4,7 +4,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
-public class GraphicsClass_Java2D extends JFrame implements GraphicsClass{
+public class GraphicsClass_Java2D extends JFrame implements GraphicsClass_dep{
     private Image spriteSheet;
     AffineTransform identity = new AffineTransform();
     Toolkit content;
@@ -164,5 +164,10 @@ public class GraphicsClass_Java2D extends JFrame implements GraphicsClass{
 
     public Image loadImage(String filename) {
         return this.content.getImage(getURL(filename));
+    }
+
+    @Override
+    public void addKeyListener(InputClass inp) {
+
     }
 }
