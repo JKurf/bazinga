@@ -4,8 +4,8 @@ import java.awt.event.KeyEvent;
 
 public class Game {
 
-    GraphicsClass_Java2D graphics = new GraphicsClass_Java2D("Awesome-Title");
-    //GraphicsClass_SDL graphics = new GraphicsClass_SDL("Awesome-Title");
+    //GraphicsClass_Java2D graphics = new GraphicsClass_Java2D("Awesome-Title");
+    GraphicsClass graphics = new GraphicsClass();
 
     InputClass input = new InputClass();
     StateMachine SM = new StateMachine();
@@ -18,7 +18,7 @@ public class Game {
     boolean finished = false;
 
     public Game() {
-        graphics.addKeyListener(input);
+        //graphics.addKeyListener(input);
         System.out.println(KeyEvent.VK_Q);
     }
 
@@ -29,7 +29,7 @@ public class Game {
         //bufferGraphics.Init(true);
         //bufferGraphics.setWorld(mainWorld);
         graphics.Init();
-        graphics.setWorld(mainWorld);
+        //graphics.setWorld(mainWorld);
     }
 
     public Boolean Update(double elapsedTime) {

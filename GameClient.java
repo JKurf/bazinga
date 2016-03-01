@@ -1,3 +1,5 @@
+import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 public class GameClient implements Runnable {
     public static void main(String[] args){
@@ -13,28 +15,31 @@ public class GameClient implements Runnable {
         Boolean done = false;
         int frames = 0;
 
+        long window = game.graphics.getWindow();
+
         double fps;
         long currentTime;
         double elapsedTime = 0.0f;
 
-        while (!done) {
+        //while (!done) {
+        while (glfwWindowShouldClose(window) == GLFW_FALSE) {
             currentTime = System.nanoTime();
             done = game.Update(elapsedTime);
             game.Render();
 
 
-            try {
+            /*try {
                 gameLoop.sleep(16);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-
+            }*/
 
             elapsedTime = (System.nanoTime() - currentTime) / 1000000000.0f;
             fps = 1/elapsedTime;
 
-            System.out.printf("\nFrame %d: deltaT:\t%f    fps: %f", frames++, elapsedTime, fps);
+            System.out.printf("deltaT:\t%f    fps: %f\n", elapsedTime, fps);
         }
+
         game.Quit();
     }
 }

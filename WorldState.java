@@ -6,7 +6,7 @@ public class WorldState implements IState{
     @Override
     public void Init(GraphicsClass graphics) {
         world = new World("TestMap");
-        graphics.setWorld(world);
+        //graphics.setWorld(world);
     }
 
     @Override
