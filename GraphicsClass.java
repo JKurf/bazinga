@@ -92,7 +92,7 @@ public class GraphicsClass {
 
         GL.createCapabilities();
 
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.8f, 0.666667f, 1.0f, 0.0f);
 
         glEnable(GL11.GL_TEXTURE_2D);
 
@@ -198,6 +198,7 @@ public class GraphicsClass {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable( GL_POINT_SMOOTH );
         glPointSize( 8.0f );
+
 
         // draw a quad textured to match the sprite
         glBegin(GL11.GL_POINTS);
