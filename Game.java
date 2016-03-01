@@ -11,9 +11,7 @@ public class Game {
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
-    WorldState world = new WorldState();
-
-    World mainWorld = new World("TestMap");
+    WorldState World1 = new WorldState("TestMap");
 
     boolean finished = false;
 
@@ -24,7 +22,9 @@ public class Game {
 
     public void Init() {
         SM.Add("Menu", menu);
-        SM.Change("Menu", new String[]{"A", "B"});
+        SM.Add("World1", World1);
+        SM.Change("Menu");
+        SM.Change("World1");
 
         //bufferGraphics.Init(true);
         //bufferGraphics.setWorld(mainWorld);
@@ -37,16 +37,16 @@ public class Game {
             finished = true;
         }
 
-        SM.Update(0.0f);
+        SM.Update(elapsedTime);
         return finished;
     }
 
     public void Render() {
+        graphics.clearScreen();
+
         SM.Render(graphics);
 
-        //bufferGraphics.Render();
-        //graphics = bufferGraphics;
-        graphics.Render();
+        graphics.updateScreen();
     }
 
     public void Quit() {

@@ -8,7 +8,7 @@ public class MenuState implements IState {
     }
 
     @Override
-    public void Update(float elapsedTime) {
+    public void Update(double elapsedTime) {
 
     }
 
