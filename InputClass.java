@@ -1,27 +1,15 @@
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Arrays;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import static org.lwjgl.glfw.GLFW.*;
 
-public class InputClass implements KeyListener {
-    boolean[] keyStates = new boolean[255];
-
-    public InputClass() {
-        Arrays.fill(keyStates, Boolean.FALSE);
-    }
+public class InputClass extends GLFWKeyCallback {
+    public static boolean[] keys = new boolean[65536];
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
+    public void invoke(long wondow, int key, int scanconde, int action, int mods) {
+        keys[key] = action != GLFW_RELEASE;
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        keyStates[e.getKeyCode()] = true;
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        keyStates[e.getKeyCode()] = false;
+    public static boolean isKeyDown(int keycode) {
+        return keys[keycode];
     }
 }

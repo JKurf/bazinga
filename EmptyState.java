@@ -1,10 +1,11 @@
 import java.awt.event.KeyEvent;
 
 public class EmptyState implements IState {
+    private boolean initialized = false;
 
     @Override
-    public void Init(GraphicsClass graphics) {
-
+    public void Init() {
+        initialized = true;
     }
 
     @Override

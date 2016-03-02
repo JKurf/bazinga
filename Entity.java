@@ -52,7 +52,6 @@ public class Entity {
     }
 
     public void loadTexture(String filename, TextureLoader texLoad) {
-
         try {
             tex = texLoad.getTexture(filename);
         } catch (IOException e) {

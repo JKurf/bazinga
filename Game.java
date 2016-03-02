@@ -1,12 +1,12 @@
 //#bangpoundben
 
 import java.awt.event.KeyEvent;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Game {
 
     //GraphicsClass_Java2D graphics = new GraphicsClass_Java2D("Awesome-Title");
     GraphicsClass graphics = new GraphicsClass();
-    Player player = new Player("Dave", "0");
 
     InputClass input = new InputClass();
     StateMachine SM = new StateMachine();
@@ -18,10 +18,12 @@ public class Game {
 
     public Game() {
         //graphics.addKeyListener(input);
-        System.out.println(KeyEvent.VK_Q);
+        //System.out.println(KeyEvent.VK_Q);
     }
 
     public void Init() {
+        graphics.Init();
+
         SM.Add("Menu", menu);
         SM.Add("World1", World1);
         SM.Change("Menu");
@@ -29,27 +31,22 @@ public class Game {
 
         //bufferGraphics.Init(true);
         //bufferGraphics.setWorld(mainWorld);
-        graphics.Init();
         //graphics.setWorld(mainWorld);
-
-        player.loadTexture("Data/TestImg.png", graphics.textureLoader);
     }
 
-    public Boolean Update(double elapsedTime) {
-        if(input.keyStates[KeyEvent.VK_Q]) {
-            finished = true;
+    public void Update(double elapsedTime) {
+        if(input.isKeyDown(GLFW_KEY_Q) || input.isKeyDown(GLFW_KEY_ESCAPE)) {
+            glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
         }
 
         SM.Update(elapsedTime);
-        return finished;
     }
 
     public void Render() {
         graphics.clearScreen();
 
         SM.Render(graphics);
-        graphics.drawEntity(player);
-        graphics.drawPoints(new Location[] {new Location(50, 50), new Location(100, 100)});
+        graphics.drawPoints(new Location[] {new Location(GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/2)});
 
         graphics.updateScreen();
     }

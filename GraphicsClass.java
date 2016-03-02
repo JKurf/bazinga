@@ -18,14 +18,13 @@ public class GraphicsClass {
     int yOffset = 16;
     */
 
-    Camera camera = new Camera();
-
-    World currentWorld = new World("TestMap");
+    //Camera camera = new Camera();
 
     static final int TILE_HEIGHT = 16;
     static final int TILE_WIDTH = 16;
-    static final int WIDTH = 320*2;
-    static final int HEIGHT = 320*2;
+    static final int WIDTH = (int)(160 * 2);
+    static final int HEIGHT = (int)(160 * 2);
+    static final float zoom = 3.0f;
 
     int TileMap_WIDTH;
     int TileMap_HEIGHT;
@@ -33,8 +32,8 @@ public class GraphicsClass {
     int TileMap_NUM_TILES_Y;
 
     Texture texture;
-    Texture TileMap;
-    TextureLoader textureLoader;
+    static Texture TileMap;
+    static TextureLoader textureLoader;
 
     // We need to strongly reference callback instances.
     private GLFWErrorCallback errorCallback;
@@ -60,7 +59,7 @@ public class GraphicsClass {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(WIDTH, HEIGHT, "Epic Game", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -68,10 +67,12 @@ public class GraphicsClass {
         glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                    glfwSetWindowShouldClose(window, GLFW_TRUE); // We will detect this in our rendering loop
+                //if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+                //    glfwSetWindowShouldClose(window, GLFW_TRUE); // We will detect this in our rendering loop
+                InputClass.keys[key] = (action != GLFW_RELEASE);
             }
         });
+
 
         // Get the resolution of the primary monitor
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -104,11 +105,22 @@ public class GraphicsClass {
 
         GL11.glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
 
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
         textureLoader = new TextureLoader();
 
         try {
-            texture = textureLoader.getTexture("Data/TestImg.png");
-            TileMap = textureLoader.getTexture("Data/TileMap.png");
+            TileMap = textureLoader.getTexture("Data/TestImg.png", GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
+
+            /*tex = getTexture(resourceName,
+                GL11.GL_TEXTURE_2D, // target
+
+                GL11.GL_RGBA,     // dst pixel format
+
+                GL11.GL_LINEAR, // min filter (unused)
+
+                GL11.GL_LINEAR);*/
 
             TileMap_WIDTH = TileMap.getImageWidth();
             TileMap_HEIGHT = TileMap.getImageHeight();
@@ -117,9 +129,16 @@ public class GraphicsClass {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        camera.x = 50;
-        camera.y = 50;
+    Texture loadTexture(String filename) {
+        try {
+            return textureLoader.getTexture(filename, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load texture: " + filename);
+        }
+        return null;
     }
 
     public void draw(int sx1, int sy1, int sx2, int sy2,
@@ -158,46 +177,45 @@ public class GraphicsClass {
         GL11.glPopMatrix();
     }
 
-    private int getPow2(int n) {
-        int ret = 2;
-        while (ret < n) {
-            ret *= 2;
-        }
-        return ret;
-    }
 
-
-    public void drawWorld(World world) {
+    public void drawWorld(World world, Camera camera) {
         for (int j = 0; j < world.rows; j++) {
             for (int i = 0; i < world.cols; i++) {
 
-                int drawx = (i * TILE_WIDTH) + WIDTH/2 - camera.x;//  + (-camera.trueX) + camera.w/2;
-                int drawy = (j * TILE_HEIGHT) + HEIGHT/2 - camera.y;// + (-camera.trueY) + camera.h/2;
+                int drawx = (i * TILE_WIDTH) + WIDTH/2 - (int)camera.x;
+                int drawy = (j * TILE_HEIGHT) + HEIGHT/2 - (int)camera.y;
+
+                drawx = (int)((drawx - WIDTH/2) * zoom) + WIDTH/2;
+                drawy = (int)((drawy - HEIGHT/2) * zoom) + HEIGHT/2;
 
                 int ID = world.map[j][i];
                 int sheetx = (ID % TileMap_NUM_TILES_X) * TILE_WIDTH;
                 int sheety = (ID / TileMap_NUM_TILES_Y) * TILE_HEIGHT;
 
                 draw(sheetx, sheety, sheetx + TILE_WIDTH, sheety + TILE_HEIGHT,
-                        drawx, drawy, TILE_WIDTH, TILE_HEIGHT, TileMap);
+                        drawx, drawy, (int)(TILE_WIDTH * zoom), (int)(TILE_HEIGHT * zoom), TileMap);
             }
         }
     }
 
     public void drawPoints(Location[] pts) {
+        drawPoints(pts, 8.0f);
+    }
+
+    public void drawPoints(Location[] pts, float size) {
         // store the current model matrix
         glPushMatrix();
 
         // translate to the right location and prepare to draw
         glTranslatef(0, 0, 0);
-        glColor3f(1,1,1);
+        glColor3f(1,0,0);
 
         glEnable(GL_ALPHA_TEST);
         glAlphaFunc(GL_NOTEQUAL, 0);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable( GL_POINT_SMOOTH );
-        glPointSize( 8.0f );
+        glPointSize( size );
 
 
         // draw a quad textured to match the sprite
@@ -220,16 +238,23 @@ public class GraphicsClass {
     }
 
     public void drawEntity(Entity ent) {
-        draw(0, 0, 16, 16, ent.location.xPos(), ent.location.yPos(), 16, 16, ent.tex);
+        draw(0, 0, 16, 16, (int)ent.location.xPos(), (int)ent.location.yPos(), 16, 16, ent.tex);
     }
-
 
     public void Render() {
         //clearScreen();
 
-        drawWorld(currentWorld);
+        //drawWorld(currentWorld);
 
         //updateScreen();
+    }
+
+    private int getPow2(int n) {
+        int ret = 2;
+        while (ret < n) {
+            ret *= 2;
+        }
+        return ret;
     }
 
     public void clearScreen() {
