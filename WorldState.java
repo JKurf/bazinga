@@ -26,15 +26,25 @@ public class WorldState implements IState{
 
     @Override
     public void Init() {
-        player.loadTexture("Data/TestImg.png", GraphicsClass.textureLoader);
+        player.loadTexture("Data/TestImg.png");
         initialized = true;
     }
 
     @Override
     public void Update(double elapsedTime) {
-        if(InputClass.isKeyDown(GLFW_KEY_SPACE)) {
-            camera.x += 20.0f * elapsedTime;
-            player.location.setX(player.location.xPos() + (float)(20.0f * elapsedTime));
+        float speed = 50.0f;
+
+        if(InputClass.isKeyDown(GLFW_KEY_RIGHT)) {
+            player.location.move((float)(speed * elapsedTime), 0);
+        }
+        if(InputClass.isKeyDown(GLFW_KEY_LEFT)) {
+            player.location.move((float)(-speed * elapsedTime), 0);
+        }
+        if(InputClass.isKeyDown(GLFW_KEY_UP)) {
+            player.location.move(0, (float)(-speed * elapsedTime));
+        }
+        if(InputClass.isKeyDown(GLFW_KEY_DOWN)) {
+            player.location.move(0, (float)(speed * elapsedTime));
         }
     }
 

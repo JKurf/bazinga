@@ -11,13 +11,8 @@ public class Camera {
     Camera() {
         x = 0;
         y = 0;
-
-    //    truex = 0.0f;
-    //    truey = 0.0f;
     }
 
     void Update(double elapsedTime) {
-    //    x = (int)truex;
-    //    y = (int)truey;
     }
 }

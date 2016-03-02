@@ -53,6 +53,11 @@ public class Location {
         direction = dir;
     }
 
+    public void move(float dx, float dy) {
+        x += dx;
+        y += dy;
+    }
+
     public void move(String dir) {
         if (dir.toUpperCase().equals(direction)) {
             switch (direction) {

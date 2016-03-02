@@ -17,21 +17,18 @@ public class GraphicsClass {
     int xOffset = 16;
     int yOffset = 16;
     */
-
-    //Camera camera = new Camera();
-
     static final int TILE_HEIGHT = 16;
     static final int TILE_WIDTH = 16;
     static final int WIDTH = (int)(160 * 2);
     static final int HEIGHT = (int)(160 * 2);
-    static final float zoom = 3.0f;
+    static final float zoom = 1.0f;
 
     int TileMap_WIDTH;
     int TileMap_HEIGHT;
     int TileMap_NUM_TILES_X;
     int TileMap_NUM_TILES_Y;
 
-    Texture texture;
+    Texture Font;
     static Texture TileMap;
     static TextureLoader textureLoader;
 
@@ -110,28 +107,24 @@ public class GraphicsClass {
 
         textureLoader = new TextureLoader();
 
+        TileMap = loadTexture("Data/TestImg.png");
+
+        TileMap_WIDTH = TileMap.getImageWidth();
+        TileMap_HEIGHT = TileMap.getImageHeight();
+        TileMap_NUM_TILES_X = TileMap_WIDTH / TILE_WIDTH;
+        TileMap_NUM_TILES_Y= TileMap_HEIGHT / TILE_HEIGHT;
+
+        /*
         try {
-            TileMap = textureLoader.getTexture("Data/TestImg.png", GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
-
-            /*tex = getTexture(resourceName,
-                GL11.GL_TEXTURE_2D, // target
-
-                GL11.GL_RGBA,     // dst pixel format
-
-                GL11.GL_LINEAR, // min filter (unused)
-
-                GL11.GL_LINEAR);*/
-
-            TileMap_WIDTH = TileMap.getImageWidth();
-            TileMap_HEIGHT = TileMap.getImageHeight();
-            TileMap_NUM_TILES_X = TileMap_WIDTH / TILE_WIDTH;
-            TileMap_NUM_TILES_Y= TileMap_HEIGHT / TILE_HEIGHT;
+            Font = textureLoader.getTexture("Data/PoorRichard.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
+        Font = loadTexture("Data/courier.png");
     }
 
-    Texture loadTexture(String filename) {
+    static Texture loadTexture(String filename) {
         try {
             return textureLoader.getTexture(filename, GL_TEXTURE_2D, GL_RGBA, GL_NEAREST, GL_NEAREST);
         } catch (IOException e) {
@@ -238,15 +231,37 @@ public class GraphicsClass {
     }
 
     public void drawEntity(Entity ent) {
-        draw(0, 0, 16, 16, (int)ent.location.xPos(), (int)ent.location.yPos(), 16, 16, ent.tex);
+        draw(16, 16, 32, 32, (int)ent.location.xPos(), (int)ent.location.yPos(), (int)(16*zoom), (int)(16*zoom), ent.tex);
     }
 
-    public void Render() {
-        //clearScreen();
+    public void drawText(String str, Texture tex, int gridSize, float x, float y,
+                         float w, float h){
+        glPushMatrix();
 
-        //drawWorld(currentWorld);
+        tex.bind();
 
-        //updateScreen();
+        glTranslatef(x, y, 0);
+        glBegin(GL_QUADS);
+
+        for (int i = 0; i < str.length(); i++) {
+            int asciiCode = (int) str.charAt(i);
+            final float cellSize = 1.0f / gridSize;
+            float cellX = ((int) asciiCode % gridSize) * cellSize;
+            float cellY = ((int) asciiCode / gridSize) * cellSize;
+
+
+            glTexCoord2f(cellX, cellY);
+            glVertex2f(i * w / 3, y);
+            glTexCoord2f(cellX + cellSize, cellY);
+            glVertex2f(i * w / 3 + w / 2, y);
+            glTexCoord2f(cellX + cellSize, cellY + cellSize);
+            glVertex2f(i * w / 3 + w / 2, y + h);
+            glTexCoord2f(cellX, cellY + cellSize);
+            glVertex2f(i * w / 3, y + h);
+        }
+
+        glEnd();
+        glPopMatrix();
     }
 
     private int getPow2(int n) {
