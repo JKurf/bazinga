@@ -28,6 +28,9 @@ public class GraphicsClass {
     int TileMap_NUM_TILES_X;
     int TileMap_NUM_TILES_Y;
 
+    String TileMapFilename = "Data/TileMap.png";
+    String FontFilename = "Data/font.png";
+
     Texture Font;
     static Texture TileMap;
     static TextureLoader textureLoader;
@@ -107,21 +110,21 @@ public class GraphicsClass {
 
         textureLoader = new TextureLoader();
 
-        TileMap = loadTexture("Data/TestImg.png");
+        TileMap = loadTexture(TileMapFilename);
 
         TileMap_WIDTH = TileMap.getImageWidth();
         TileMap_HEIGHT = TileMap.getImageHeight();
         TileMap_NUM_TILES_X = TileMap_WIDTH / TILE_WIDTH;
         TileMap_NUM_TILES_Y= TileMap_HEIGHT / TILE_HEIGHT;
 
-        /*
-        try {
-            Font = textureLoader.getTexture("Data/PoorRichard.png");
+
+        /*try {
+            Font = textureLoader.getTexture("Data/font.png");
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        */
-        Font = loadTexture("Data/courier.png");
+        }*/
+
+        Font = loadTexture(FontFilename);
     }
 
     static Texture loadTexture(String filename) {
@@ -149,7 +152,7 @@ public class GraphicsClass {
         tex.bind();
 
         // translate to the right location and prepare to draw
-        glTranslatef(x, y, 0);
+        glTranslatef(world2ScreenX(x), world2ScreenY(y), 0);
         glColor3f(1,1,1);
 
         // draw a quad textured to match the sprite
@@ -170,16 +173,20 @@ public class GraphicsClass {
         GL11.glPopMatrix();
     }
 
-
-    public void drawWorld(World world, Camera camera) {
+    public void drawWorld(World world) {
         for (int j = 0; j < world.rows; j++) {
             for (int i = 0; i < world.cols; i++) {
 
-                int drawx = (i * TILE_WIDTH) + WIDTH/2 - (int)camera.x;
-                int drawy = (j * TILE_HEIGHT) + HEIGHT/2 - (int)camera.y;
+                int worldSizeX = world.cols * TILE_WIDTH;
+                int worldSizeY = world.rows * TILE_HEIGHT;
 
-                drawx = (int)((drawx - WIDTH/2) * zoom) + WIDTH/2;
-                drawy = (int)((drawy - HEIGHT/2) * zoom) + HEIGHT/2;
+                int drawx = (i * TILE_WIDTH) - TILE_WIDTH/2;
+                int drawy = worldSizeY - (j * TILE_HEIGHT) - TILE_HEIGHT/2;
+
+                //Location l = new Location(world2Screen(new Location(drawx, drawy)));
+
+                //drawx = (int)((l.xPos() - WIDTH/2) * zoom) + WIDTH/2;
+                //drawy = (int)((l.yPos() - HEIGHT/2) * zoom) + HEIGHT/2;
 
                 int ID = world.map[j][i];
                 int sheetx = (ID % TileMap_NUM_TILES_X) * TILE_WIDTH;
@@ -238,18 +245,22 @@ public class GraphicsClass {
                          float w, float h){
         glPushMatrix();
 
+        //glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+
         tex.bind();
 
         glTranslatef(x, y, 0);
         glBegin(GL_QUADS);
 
         for (int i = 0; i < str.length(); i++) {
-            int asciiCode = (int) str.charAt(i);
+            //int asciiCode = (int) str.charAt(i);
+            int asciiCode = customAscii(str.charAt(i));
             final float cellSize = 1.0f / gridSize;
             float cellX = ((int) asciiCode % gridSize) * cellSize;
             float cellY = ((int) asciiCode / gridSize) * cellSize;
 
-
+            /*
             glTexCoord2f(cellX, cellY);
             glVertex2f(i * w / 3, y);
             glTexCoord2f(cellX + cellSize, cellY);
@@ -258,18 +269,46 @@ public class GraphicsClass {
             glVertex2f(i * w / 3 + w / 2, y + h);
             glTexCoord2f(cellX, cellY + cellSize);
             glVertex2f(i * w / 3, y + h);
+            */
+
+            glTexCoord2f(cellX, cellY);
+            glVertex2f(i * w, y);
+            glTexCoord2f(cellX + cellSize, cellY);
+            glVertex2f(i * w + w, y);
+            glTexCoord2f(cellX + cellSize, cellY + cellSize);
+            glVertex2f(i * w + w, y + h);
+            glTexCoord2f(cellX, cellY + cellSize);
+            glVertex2f(i * w, y + h);
         }
 
         glEnd();
+
+        glDisable(GL_BLEND);
+
         glPopMatrix();
     }
 
-    private int getPow2(int n) {
-        int ret = 2;
-        while (ret < n) {
-            ret *= 2;
-        }
+    public Location world2Screen(Location loc) {
+        Location ret = new Location();
+
+        //x = cx - (w/2 - u);
+        //y = cy + (h/2 - v);
+
+        //x - cx + w/2 = u
+        //-y + cy + h/2 = v
+
+        ret.setX(loc.xPos() - Camera.x + WIDTH/2);
+        ret.setX(-loc.yPos() + Camera.y + HEIGHT/2);
+
         return ret;
+    }
+
+    public float world2ScreenX(float x) {
+        return x - Camera.x + WIDTH/2;
+    }
+
+    public float world2ScreenY(float y) {
+        return -y + Camera.y + HEIGHT/2;
     }
 
     public void clearScreen() {
@@ -293,5 +332,27 @@ public class GraphicsClass {
         glfwTerminate();
         //errorCallback.free();
         keyCallback.release();
+    }
+
+    private int getPow2(int n) {
+        int ret = 2;
+        while (ret < n) {
+            ret *= 2;
+        }
+        return ret;
+    }
+
+    private int customAscii(char c) {
+        int ascii = (int)c;
+
+        if((ascii < 65) || (ascii > 90)) {
+            ascii = 26;
+        }
+        else {
+            ascii = ascii - 65;
+        }
+
+        //return ascii;
+        return (int)c;
     }
 }

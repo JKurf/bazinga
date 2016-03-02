@@ -9,7 +9,7 @@ public class Game {
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
-    WorldState World1 = new WorldState("TestMap");
+    WorldState World1 = new WorldState("Map2");
 
     public Game() {
     }
@@ -34,10 +34,10 @@ public class Game {
     public void Render() {
         graphics.clearScreen();
 
-        //SM.Render(graphics);
-        //graphics.drawPoints(new Location[] {new Location(GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/2)});
+        SM.Render(graphics);
+        graphics.drawPoints(new Location[] {new Location(GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/2)});
 
-        graphics.drawText("Lmao This is some awesome Text :^)", graphics.Font, 16, 0, 0, 16.0f, 16.0f);
+        //graphics.drawText("Lmao This is some awesome Text :^)", graphics.Font, 16, 0, 0, 16.0f, 16.0f);
 
         graphics.updateScreen();
     }

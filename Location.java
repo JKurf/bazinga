@@ -21,6 +21,8 @@ public class Location {
         this.direction = direction;
     }
 
+    public Location(Location loc) {this(loc.xPos(), loc.yPos(), "DOWN");}
+
     public float xPos() {
         return x;
     }
