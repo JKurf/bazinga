@@ -34,16 +34,16 @@ public class WorldState implements IState{
     public void Update(double elapsedTime) {
         float speed = 50.0f;
 
-        if(InputClass.isKeyDown(GLFW_KEY_RIGHT)) {
+        if(InputClass.isKeyDown(GLFW_KEY_D)) {
             player.location.move((float)(speed * elapsedTime), 0);
         }
-        if(InputClass.isKeyDown(GLFW_KEY_LEFT)) {
+        if(InputClass.isKeyDown(GLFW_KEY_A)) {
             player.location.move((float)(-speed * elapsedTime), 0);
         }
-        if(InputClass.isKeyDown(GLFW_KEY_UP)) {
+        if(InputClass.isKeyDown(GLFW_KEY_W)) {
             player.location.move(0, (float)(speed * elapsedTime));
         }
-        if(InputClass.isKeyDown(GLFW_KEY_DOWN)) {
+        if(InputClass.isKeyDown(GLFW_KEY_S)) {
             player.location.move(0, (float)(-speed * elapsedTime));
         }
 
