@@ -352,7 +352,7 @@ public class GraphicsClass {
             ascii = ascii - 65;
         }
 
-        //return ascii;
-        return (int)c;
+        ascii = (int)c;
+        return ascii;
     }
 }
