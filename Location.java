@@ -21,6 +21,8 @@ public class Location {
         this.direction = direction;
     }
 
+    public Location(Location loc) {this(loc.xPos(), loc.yPos(), "DOWN");}
+
     public float xPos() {
         return x;
     }
@@ -51,6 +53,11 @@ public class Location {
 
     public void setDirection(String dir) {
         direction = dir;
+    }
+
+    public void move(float dx, float dy) {
+        x += dx;
+        y += dy;
     }
 
     public void move(String dir) {

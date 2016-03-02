@@ -51,12 +51,8 @@ public class Entity {
         }
     }
 
-    public void loadTexture(String filename, TextureLoader texLoad) {
-        try {
-            tex = texLoad.getTexture(filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void loadTexture(String filename) {
+        tex = GraphicsClass.loadTexture(filename);
     }
 
     /**

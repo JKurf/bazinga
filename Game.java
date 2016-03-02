@@ -1,11 +1,8 @@
 //#bangpoundben
 
-import java.awt.event.KeyEvent;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Game {
-
-    //GraphicsClass_Java2D graphics = new GraphicsClass_Java2D("Awesome-Title");
     GraphicsClass graphics = new GraphicsClass();
 
     InputClass input = new InputClass();
@@ -14,11 +11,7 @@ public class Game {
     MenuState menu = new MenuState();
     WorldState World1 = new WorldState("Map2");
 
-    boolean finished = false;
-
     public Game() {
-        //graphics.addKeyListener(input);
-        //System.out.println(KeyEvent.VK_Q);
     }
 
     public void Init() {
@@ -28,10 +21,6 @@ public class Game {
         SM.Add("World1", World1);
         SM.Change("Menu");
         SM.Change("World1");
-
-        //bufferGraphics.Init(true);
-        //bufferGraphics.setWorld(mainWorld);
-        //graphics.setWorld(mainWorld);
     }
 
     public void Update(double elapsedTime) {
@@ -48,12 +37,13 @@ public class Game {
         SM.Render(graphics);
         graphics.drawPoints(new Location[] {new Location(GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/2)});
 
+        //graphics.drawText("Lmao This is some awesome Text :^)", graphics.Font, 16, 0, 0, 16.0f, 16.0f);
+
         graphics.updateScreen();
     }
 
     public void Quit() {
         SM.Quit();
-        //bufferGraphics.Quit();
         graphics.Quit();
         System.out.printf("\nQuitso");
     }
