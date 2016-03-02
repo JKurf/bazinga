@@ -1,19 +1,19 @@
 public class Location {
-    private int x;
-    private int y;
-    private int xLast;
-    private int yLast;
+    private float x;
+    private float y;
+    private float xLast;
+    private float yLast;
     private String direction;
 
     public Location() {
         this(0, 0, "DOWN");
     }
 
-    public Location(int x, int y) {
+    public Location(float x, float y) {
         this(x, y, "DOWN");
     }
 
-    public Location(int x, int y, String direction) {
+    public Location(float x, float y, String direction) {
         this.x = x;
         this.y = y;
         this.xLast = x;
@@ -21,19 +21,19 @@ public class Location {
         this.direction = direction;
     }
 
-    public int xPos() {
+    public float xPos() {
         return x;
     }
 
-    public int yPos() {
+    public float yPos() {
         return y;
     }
 
-    public int xPrev() {
+    public float xPrev() {
         return xLast;
     }
 
-    public int yPrev() {
+    public float yPrev() {
         return yLast;
     }
 
@@ -41,11 +41,11 @@ public class Location {
         return direction;
     }
 
-    public void setX(int coordinate) {
+    public void setX(float coordinate) {
         x = coordinate;
     }
 
-    public void setY(int coordinate) {
+    public void setY(float coordinate) {
         y = coordinate;
     }
 

@@ -52,12 +52,13 @@ public class Entity {
     }
 
     public void loadTexture(String filename, TextureLoader texLoad) {
-
+        System.out.println("Start");
         try {
             tex = texLoad.getTexture(filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("End");
     }
 
     /**

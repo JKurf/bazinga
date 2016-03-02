@@ -32,6 +32,7 @@ public class StateMachine {
     public void Add(String name, IState state)
     {
         mStates.put(name, state);
+        mStates.get(name).Init();
     }
 
     public void Quit() {

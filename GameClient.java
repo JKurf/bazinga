@@ -24,8 +24,7 @@ public class GameClient implements Runnable {
         //while (!done) {
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
             currentTime = System.nanoTime();
-            done = game.Update(elapsedTime);
-            game.Render();
+            game.Update(elapsedTime);            game.Render();
 
 
             /*try {
