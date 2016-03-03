@@ -70,9 +70,7 @@ public class GraphicsClass {
         glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                //if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                //    glfwSetWindowShouldClose(window, GLFW_TRUE); // We will detect this in our rendering loop
-                InputClass.keys[key] = (action != GLFW_RELEASE);
+                InputClass.poll(window, key, scancode, action, mods);
             }
         });
 
@@ -196,6 +194,24 @@ public class GraphicsClass {
         }
     }
 
+    public void drawClip(World world) {
+        for (int j = 0; j < world.rows; j++) {
+            for (int i = 0; i < world.cols; i++) {
+
+                int worldSizeX = world.cols * TILE_WIDTH;
+                int worldSizeY = world.rows * TILE_HEIGHT;
+
+                int drawx = (i * TILE_WIDTH);
+                int drawy = worldSizeY - (j * TILE_HEIGHT);
+
+                //draw(sheetx, sheety, sheetx + TILE_WIDTH, sheety + TILE_HEIGHT,
+                //        drawx, drawy, (int)(TILE_WIDTH), (int)(TILE_HEIGHT), TileMap);
+                if(world.clip[j][i])
+                    drawRect(drawx, drawy, TILE_WIDTH, TILE_HEIGHT);
+            }
+        }
+    }
+
     public void drawPoints(Location[] pts) {
         drawPoints(pts, 8.0f);
     }
@@ -233,6 +249,36 @@ public class GraphicsClass {
         // restore the model view matrix to prevent contamination
         GL11.glPopMatrix();
 
+    }
+
+    public void drawRect(int x, int y, int w, int h) {
+        // store the current model matrix
+        glPushMatrix();
+
+        // translate to the right location and prepare to draw
+        //glTranslatef(world2ScreenX(x), world2ScreenX(y), 0);
+        glTranslatef(world2ScreenX(x) - TILE_WIDTH/2, world2ScreenY(y) + TILE_HEIGHT/2, 0);
+        glColor3f(1,0,0);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+
+
+        // draw a quad textured to match the sprite
+        glBegin(GL11.GL_QUADS);
+        {
+            glVertex2f(0, 0);
+            glVertex2f(0, h);
+            glVertex2f(w, h);
+            glVertex2f(w, 0);
+        }
+        GL11.glEnd();
+
+        glBlendFunc(GL_NONE, GL_NONE);
+        glDisable(GL_BLEND);
+
+        // restore the model view matrix to prevent contamination
+        GL11.glPopMatrix();
     }
 
     public void drawEntity(Entity ent) {

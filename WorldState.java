@@ -12,7 +12,7 @@ public class WorldState implements IState{
     int worldHeight;
 
     boolean track = true;
-    boolean fresh = false;
+    boolean drawClip = false;
 
     public WorldState(String worldName) {
         world = new World(worldName);
@@ -56,17 +56,11 @@ public class WorldState implements IState{
             player.location.move(0, (float)(-speed * elapsedTime * GraphicsClass.TILE_HEIGHT));
         }
 
-        if(InputClass.isKeyDown(GLFW_KEY_SPACE)) {
-            if(fresh) {
-                track = !track;
-            } else {
-                fresh = true;
-            }
+        if(InputClass.keyPress(GLFW_KEY_SPACE)) {
+            track = !track;
         }
-        else
-        {
-            fresh = false;
-        }
+        if(InputClass.keyPress(GLFW_KEY_R))
+            drawClip = !drawClip;
 
         if(track) {
             Camera.x = player.location.xPos();
@@ -77,6 +71,7 @@ public class WorldState implements IState{
     @Override
     public void Render(GraphicsClass graphics) {
         graphics.drawWorld(world);
+        if(drawClip) graphics.drawClip(world);
         graphics.drawEntity(player);
 
         graphics.drawText(String.format("POSITION:"), graphics.Font, 16, 0, 0, 8.0f, 8.0f);
@@ -86,7 +81,7 @@ public class WorldState implements IState{
         if(track) {text = "Track";}
         else {text = "Not Track";}
 
-        graphics.drawText(text, graphics.Font, 16, 0, 16, 8, 8);
+        graphics.drawText(String.format("%d", InputClass.cooldown[GLFW_KEY_R]), graphics.Font, 16, 0, 16, 8, 8);
 
         //graphics.drawText(String.format("ABC DEF"), graphics.Font, 8, 0, 0, 8.0f, 8.0f);
     }

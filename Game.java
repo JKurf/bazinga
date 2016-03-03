@@ -24,6 +24,7 @@ public class Game {
     }
 
     public void Update(double elapsedTime) {
+        InputClass.Update(elapsedTime);
         if(input.isKeyDown(GLFW_KEY_Q) || input.isKeyDown(GLFW_KEY_ESCAPE)) {
             glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
         }
