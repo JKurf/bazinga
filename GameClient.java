@@ -2,6 +2,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 public class GameClient implements Runnable {
+    static double fps;
     public static void main(String[] args){
         GameClient GC = new GameClient();
         GC.run();
@@ -10,14 +11,12 @@ public class GameClient implements Runnable {
     @Override
     public void run() {
         Game game = new Game();
-        Thread gameLoop = new Thread(this);
+        //Thread gameLoop = new Thread(this);
         game.Init();
-        Boolean done = false;
-        int frames = 0;
+        //Boolean done = false;
 
         long window = game.graphics.getWindow();
 
-        double fps;
         long currentTime;
         double elapsedTime = 0.0f;
 
@@ -36,7 +35,7 @@ public class GameClient implements Runnable {
             elapsedTime = (System.nanoTime() - currentTime) / 1000000000.0f;
             fps = 1/elapsedTime;
 
-            System.out.printf("deltaT:\t%f    fps: %f\n", elapsedTime, fps);
+            //System.out.printf("deltaT:\t%f    fps: %f\n", elapsedTime, fps);
         }
 
         game.Quit();

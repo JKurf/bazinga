@@ -9,7 +9,7 @@ public class Game {
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
-    WorldState World1 = new WorldState("Map2");
+    WorldState World1 = new WorldState("TestMap");
 
     public Game() {
     }
@@ -38,6 +38,9 @@ public class Game {
         graphics.drawPoints(new Location[] {new Location(GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/2)});
 
         //graphics.drawText("Lmao This is some awesome Text :^)", graphics.Font, 16, 0, 0, 16.0f, 16.0f);
+
+        String FPS = String.format("fps:%.1f", GameClient.fps);
+        graphics.drawText(FPS, graphics.Font, 16, GraphicsClass.WIDTH/2, 0, 8.0f, 8.0f);
 
         graphics.updateScreen();
     }

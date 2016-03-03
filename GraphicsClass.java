@@ -1,3 +1,4 @@
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -10,6 +11,8 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.nio.IntBuffer;
+
 public class GraphicsClass {
     /*
     final int renderOffsetX = 8;
@@ -19,9 +22,9 @@ public class GraphicsClass {
     */
     static final int TILE_HEIGHT = 16;
     static final int TILE_WIDTH = 16;
-    static final int WIDTH = (int)(160 * 2);
-    static final int HEIGHT = (int)(160 * 2);
-    static final float zoom = 1.0f;
+    static int WIDTH = (int)(160 * 2);
+    static int HEIGHT = (int)(160 * 2);
+    static final float zoom = 2.0f;
 
     int TileMap_WIDTH;
     int TileMap_HEIGHT;
@@ -29,7 +32,7 @@ public class GraphicsClass {
     int TileMap_NUM_TILES_Y;
 
     String TileMapFilename = "Data/TileMap.png";
-    String FontFilename = "Data/font.png";
+    String FontFilename = "Data/CustomFont.png";
 
     Texture Font;
     static Texture TileMap;
@@ -152,7 +155,7 @@ public class GraphicsClass {
         tex.bind();
 
         // translate to the right location and prepare to draw
-        glTranslatef(world2ScreenX(x), world2ScreenY(y), 0);
+        glTranslatef(world2ScreenX(x) - TILE_WIDTH/2, world2ScreenY(y) + TILE_HEIGHT/2, 0);
         glColor3f(1,1,1);
 
         // draw a quad textured to match the sprite
@@ -180,20 +183,15 @@ public class GraphicsClass {
                 int worldSizeX = world.cols * TILE_WIDTH;
                 int worldSizeY = world.rows * TILE_HEIGHT;
 
-                int drawx = (i * TILE_WIDTH) - TILE_WIDTH/2;
-                int drawy = worldSizeY - (j * TILE_HEIGHT) - TILE_HEIGHT/2;
-
-                //Location l = new Location(world2Screen(new Location(drawx, drawy)));
-
-                //drawx = (int)((l.xPos() - WIDTH/2) * zoom) + WIDTH/2;
-                //drawy = (int)((l.yPos() - HEIGHT/2) * zoom) + HEIGHT/2;
+                int drawx = (i * TILE_WIDTH);
+                int drawy = worldSizeY - (j * TILE_HEIGHT);
 
                 int ID = world.map[j][i];
                 int sheetx = (ID % TileMap_NUM_TILES_X) * TILE_WIDTH;
                 int sheety = (ID / TileMap_NUM_TILES_Y) * TILE_HEIGHT;
 
                 draw(sheetx, sheety, sheetx + TILE_WIDTH, sheety + TILE_HEIGHT,
-                        drawx, drawy, (int)(TILE_WIDTH * zoom), (int)(TILE_HEIGHT * zoom), TileMap);
+                        drawx, drawy, (int)(TILE_WIDTH), (int)(TILE_HEIGHT), TileMap);
             }
         }
     }
@@ -238,14 +236,19 @@ public class GraphicsClass {
     }
 
     public void drawEntity(Entity ent) {
-        draw(16, 16, 32, 32, (int)ent.location.xPos(), (int)ent.location.yPos(), (int)(16*zoom), (int)(16*zoom), ent.tex);
+        draw(16, 16, 32, 32, (int)ent.location.xPos(), (int)(ent.location.yPos() + TILE_HEIGHT), (int)(16), (int)(16), ent.tex);
     }
 
     public void drawText(String str, Texture tex, int gridSize, float x, float y,
-                         float w, float h){
+                         float W, float H){
+        float w = W * zoom;
+        float h = H * zoom;
+
+        String strUp = str.toUpperCase();
+
         glPushMatrix();
 
-        //glEnable(GL_BLEND);
+        glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
 
         tex.bind();
@@ -255,7 +258,7 @@ public class GraphicsClass {
 
         for (int i = 0; i < str.length(); i++) {
             //int asciiCode = (int) str.charAt(i);
-            int asciiCode = customAscii(str.charAt(i));
+            int asciiCode = customAscii(strUp.charAt(i));
             final float cellSize = 1.0f / gridSize;
             float cellX = ((int) asciiCode % gridSize) * cellSize;
             float cellY = ((int) asciiCode / gridSize) * cellSize;
@@ -304,7 +307,7 @@ public class GraphicsClass {
     }
 
     public float world2ScreenX(float x) {
-        return x - Camera.x + WIDTH/2;
+        return (x - Camera.x + WIDTH/2);
     }
 
     public float world2ScreenY(float y) {
@@ -313,6 +316,18 @@ public class GraphicsClass {
 
     public void clearScreen() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
+
+        /*
+        glfwGetWindowSize(window, w, h);
+        WIDTH = w.get(0);
+        HEIGHT = h.get(0);
+
+        System.out.println(WIDTH);
+        System.out.println(HEIGHT);
+        */
     }
 
     public void updateScreen() {
