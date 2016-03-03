@@ -6,6 +6,7 @@ public class World {
 
     String name; //Map Name
     int[][] map; //Map's Integer Array for Tiling
+    boolean[][] clip;  //Map of collision boundaries
     int rows; //Rows of Map's Array
     int cols; //Columns of Map's Array
 
@@ -33,7 +34,12 @@ public class World {
             //Create the Map's Array [row][column]
             this.map = new int[rows][cols];
             int count = 0; //Simple counter
-            while (fileScan.hasNext()) this.map[(count / cols)][count++ % (cols)] = fileScan.nextInt();
+            //while (fileScan.hasNext()) this.map[(count / cols)][count++ % (cols)] = fileScan.nextInt();
+            while (count < rows*cols) this.map[(count / cols)][count++ % (cols)] = fileScan.nextInt();
+
+            this.clip = new boolean[rows][cols];
+            count = 0;
+            while (count < rows*cols)this.clip[(count / cols)][count++ % (cols)] = fileScan.nextInt() == 1;
 
         } catch (FileNotFoundException e) {
             System.out.printf("\nWorld File for '%s' Not Found\n", name);
