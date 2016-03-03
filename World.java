@@ -34,12 +34,21 @@ public class World {
             //Create the Map's Array [row][column]
             this.map = new int[rows][cols];
             int count = 0; //Simple counter
-            //while (fileScan.hasNext()) this.map[(count / cols)][count++ % (cols)] = fileScan.nextInt();
-            while (count < rows*cols) this.map[(count / cols)][count++ % (cols)] = fileScan.nextInt();
+            while (count < rows*cols) {
+                //if(fileScan.hasNextInt())
+                    this.map[(count / cols)][count++ % (cols)] = fileScan.nextInt();
+                //else
+                //    this.map[(count / cols)][count++ % (cols)] = 0;
+            }
 
             this.clip = new boolean[rows][cols];
             count = 0;
-            while (count < rows*cols)this.clip[(count / cols)][count++ % (cols)] = fileScan.nextInt() == 1;
+            while (count < rows*cols) {
+                //if(fileScan.hasNextInt())
+                    this.clip[(count / cols)][count++ % (cols)] = fileScan.nextInt() == 1;
+                //else
+                //    this.clip[(count / cols)][count++ % (cols)] = fileScan.nextInt() == 1;
+            }
 
         } catch (FileNotFoundException e) {
             System.out.printf("\nWorld File for '%s' Not Found\n", name);
