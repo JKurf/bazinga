@@ -6,7 +6,7 @@ public class MenuState implements IState {
     int activeP = 0;
     int activeC = 0;
     int MaxChildren = 4;
-    
+
     String action = null;
 
     @Override
