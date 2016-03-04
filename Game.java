@@ -10,6 +10,9 @@ public class Game {
 
     MenuState menu = new MenuState();
     WorldState World1 = new WorldState("The Black Lagoon");
+    WorldState World2 = new WorldState("The White Lagoon");
+
+    boolean whichWorld = true;
 
     public Game() {
     }
@@ -19,7 +22,8 @@ public class Game {
 
         SM.Add("Menu", menu);
         SM.Add("World1", World1);
-        //SM.Change("Menu");
+        SM.Add("World2", World2);
+
         SM.Change("World1");
     }
 
@@ -39,6 +43,15 @@ public class Game {
             }
             if(act.equals("resume")) {
                 SM.Change("World1");
+            }
+            if(act.equals("change")) {
+                if(whichWorld == true) {
+                    SM.Change("World2");
+                    whichWorld = false;
+                } else {
+                    SM.Change("World1");
+                    whichWorld = true;
+                }
             }
         }
     }

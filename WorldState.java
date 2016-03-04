@@ -82,11 +82,9 @@ public class WorldState implements IState{
         graphics.drawText(String.format("POSITION:"), graphics.Font, 16, 0, 0, 8.0f, 8.0f);
         graphics.drawText(String.format("(%.1f,%.1f)",player.location.xPos()/16.0f, player.location.yPos()/16.0f), graphics.Font, 16, 0, 8, 8.0f, 8.0f);
 
-        String text = "dank";
-        if(track) {text = "Track";}
-        else {text = "Not Track";}
+        String text = world.name;
 
-        graphics.drawText(String.format("%d", InputClass.cooldown[GLFW_KEY_R]), graphics.Font, 16, 0, 16, 8, 8);
+        graphics.drawText(text, graphics.Font, 16, 0, 16, 8, 8);
 
         //graphics.drawText(String.format("ABC DEF"), graphics.Font, 8, 0, 0, 8.0f, 8.0f);
     }

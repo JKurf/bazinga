@@ -16,12 +16,7 @@ public class MenuState implements IState {
 
             MenuItem resume = new MenuItem("resume");
             MenuItem settings = new MenuItem("settings");
-            settings.Init();
-            settings.addChild(new MenuItem("game"));
-            settings.addChild(new MenuItem("audio"));
-            settings.addChild(new MenuItem("video"));
-
-            MenuItem memes = new MenuItem("memes");
+            MenuItem memes = new MenuItem("change world");
             MenuItem quit = new MenuItem("quit");
 
             root.addChild(resume);
@@ -46,8 +41,11 @@ public class MenuState implements IState {
             if(root.current.equals("quit")) {
                 action = "quit";
             }
-            else if(root.current.equals("resume")) {
+            if(root.current.equals("resume")) {
                 action = "resume";
+            }
+            if(root.current.equals("change world")) {
+                action = "change";
             }
         }
         else
