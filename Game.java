@@ -19,7 +19,8 @@ public class Game {
 
         SM.Add("Menu", menu);
         SM.Add("World1", World1);
-        SM.Change("Menu");
+        //SM.Change("Menu");
+        SM.Change("World1");
     }
 
     public void Update(double elapsedTime) {
@@ -28,16 +29,17 @@ public class Game {
             glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
         }
 
-        if(InputClass.keyPress(GLFW_KEY_P)) {
-            if(SM.mCurrentStateID == "World1") {
+        String act = SM.Update(elapsedTime);
+        if(act != null) {
+            if (act.equals("quit")) {
+                glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
+            }
+            if (act.equals("pause")) {
                 SM.Change("Menu");
-            } else {
+            }
+            if(act.equals("resume")) {
                 SM.Change("World1");
             }
-        }
-
-        if(SM.Update(elapsedTime) == "quit") {
-            glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
         }
     }
 

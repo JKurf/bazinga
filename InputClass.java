@@ -5,7 +5,7 @@ public class InputClass {
     public static boolean[] keys = new boolean[1024];
     public static boolean[] keysOld = new boolean[1024];
     public static int[] cooldown = new int[1024];
-    public static int cooldownMax = 20;
+    public static int cooldownMax = 10;
 
     public static void poll(long window, int key, int scanconde, int action, int mods) {
         InputClass.keysOld[key] = InputClass.keys[key];

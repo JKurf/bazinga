@@ -12,6 +12,8 @@ public class WorldState implements IState{
     boolean track = true;
     boolean drawClip = false;
 
+    String action = null;
+
     public WorldState(String worldName) {
         world = new World(worldName);
         worldWidth = world.cols * GraphicsClass.TILE_WIDTH;
@@ -60,6 +62,11 @@ public class WorldState implements IState{
         if(InputClass.keyPress(GLFW_KEY_R))
             drawClip = !drawClip;
 
+        if(InputClass.keyPress(GLFW_KEY_P))
+            action = "pause";
+        else
+            action = null;
+
         if(track) {
             Camera.x = player.location.xPos();
             Camera.y = player.location.yPos();
@@ -96,6 +103,6 @@ public class WorldState implements IState{
 
     @Override
     public String check() {
-        return null;
+        return action;
     }
 }

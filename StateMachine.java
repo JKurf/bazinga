@@ -10,8 +10,9 @@ public class StateMachine {
     {
 
         mCurrentState.Update(elapsedTime);
-        if (mCurrentState.check() == "quit") {
-            return "quit";
+        String act = mCurrentState.check();
+        if (act != null) {
+            return act;
         }
 
         return null;
