@@ -4,10 +4,17 @@ import java.util.Map;
 public class StateMachine {
     Map<String, IState> mStates = new HashMap();
     IState mCurrentState = new EmptyState();
+    String mCurrentStateID;
 
-    public void Update(double elapsedTime)
+    public String Update(double elapsedTime)
     {
+
         mCurrentState.Update(elapsedTime);
+        if (mCurrentState.check() == "quit") {
+            return "quit";
+        }
+
+        return null;
     }
 
     public void Render(GraphicsClass graphics)
@@ -19,6 +26,7 @@ public class StateMachine {
     {
         mCurrentState.OnExit();
         mCurrentState = mStates.get(stateName);
+        mCurrentStateID = stateName;
         mCurrentState.OnEnter(new String[] {""});
     }
 
@@ -26,6 +34,7 @@ public class StateMachine {
     {
         mCurrentState.OnExit();
         mCurrentState = mStates.get(stateName);
+        mCurrentStateID = stateName;
         mCurrentState.OnEnter(params);
     }
 
