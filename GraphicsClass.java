@@ -337,7 +337,7 @@ public class GraphicsClass {
         glPopMatrix();
     }
 
-    public void drawTextMid(String str, float x, float y){
+    public void drawTextMenu(String str, float x, float y, boolean highlight){
         float W = 8.0f;
         float H = 8.0f;
         int gridSize = 16;
@@ -351,7 +351,8 @@ public class GraphicsClass {
 
         glPushMatrix();
 
-        glEnable(GL_BLEND);
+        if(!highlight)
+            glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
 
         Font.bind();
