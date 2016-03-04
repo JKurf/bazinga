@@ -20,7 +20,6 @@ public class Game {
         SM.Add("Menu", menu);
         SM.Add("World1", World1);
         SM.Change("Menu");
-        SM.Change("World1");
     }
 
     public void Update(double elapsedTime) {
@@ -29,14 +28,24 @@ public class Game {
             glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
         }
 
-        SM.Update(elapsedTime);
+        if(InputClass.keyPress(GLFW_KEY_P)) {
+            if(SM.mCurrentStateID == "World1") {
+                SM.Change("Menu");
+            } else {
+                SM.Change("World1");
+            }
+        }
+
+        if(SM.Update(elapsedTime) == "quit") {
+            glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
+        }
     }
 
     public void Render() {
         graphics.clearScreen();
 
         SM.Render(graphics);
-        graphics.drawPoints(new Location[] {new Location(GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/2)});
+        //graphics.drawPoints(new Location[] {new Location(GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/2)});
 
         //graphics.drawText("Lmao This is some awesome Text :^)", graphics.Font, 16, 0, 0, 16.0f, 16.0f);
 

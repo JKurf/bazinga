@@ -337,6 +337,63 @@ public class GraphicsClass {
         glPopMatrix();
     }
 
+    public void drawTextMid(String str, float x, float y){
+        float W = 8.0f;
+        float H = 8.0f;
+        int gridSize = 16;
+
+        float w = W * zoom;
+        float h = H * zoom;
+
+        int L = str.length();
+
+        String strUp = str.toUpperCase();
+
+        glPushMatrix();
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+
+        Font.bind();
+
+        glTranslatef(x - L*w/2, y - w/2, 0);
+        glBegin(GL_QUADS);
+
+        for (int i = 0; i < str.length(); i++) {
+            //int asciiCode = (int) str.charAt(i);
+            int asciiCode = customAscii(strUp.charAt(i));
+            final float cellSize = 1.0f / gridSize;
+            float cellX = ((int) asciiCode % gridSize) * cellSize;
+            float cellY = ((int) asciiCode / gridSize) * cellSize;
+
+            /*
+            glTexCoord2f(cellX, cellY);
+            glVertex2f(i * w / 3, y);
+            glTexCoord2f(cellX + cellSize, cellY);
+            glVertex2f(i * w / 3 + w / 2, y);
+            glTexCoord2f(cellX + cellSize, cellY + cellSize);
+            glVertex2f(i * w / 3 + w / 2, y + h);
+            glTexCoord2f(cellX, cellY + cellSize);
+            glVertex2f(i * w / 3, y + h);
+            */
+
+            glTexCoord2f(cellX, cellY);
+            glVertex2f(i * w, y);
+            glTexCoord2f(cellX + cellSize, cellY);
+            glVertex2f(i * w + w, y);
+            glTexCoord2f(cellX + cellSize, cellY + cellSize);
+            glVertex2f(i * w + w, y + h);
+            glTexCoord2f(cellX, cellY + cellSize);
+            glVertex2f(i * w, y + h);
+        }
+
+        glEnd();
+
+        glDisable(GL_BLEND);
+
+        glPopMatrix();
+    }
+
     public Location world2Screen(Location loc) {
         Location ret = new Location();
 

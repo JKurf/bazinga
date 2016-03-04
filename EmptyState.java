@@ -1,5 +1,3 @@
-import java.awt.event.KeyEvent;
-
 public class EmptyState implements IState {
     private boolean initialized = false;
 
@@ -29,7 +27,7 @@ public class EmptyState implements IState {
     }
 
     @Override
-    public void ProcessInput(KeyEvent e) {
-
+    public String check() {
+        return null;
     }
 }
