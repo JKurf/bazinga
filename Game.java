@@ -9,7 +9,7 @@ public class Game {
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
-    WorldState World1 = new WorldState("Map2");
+    WorldState World1 = new WorldState("Test");
 
     public Game() {
     }

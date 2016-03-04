@@ -1,6 +1,8 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import java.io.FileReader;
+import java.util.List;
 
 public class World {
 
@@ -18,25 +20,23 @@ public class World {
         getMapData();
     }
 
-    /**
-     * This Method will take the World text file in WorldFiles, and from it retrieve the Maps's 2D Integer Array
-     */
     public void getMapData() {
-        File file = new File("WorldFiles/" + name + ".txt");
+        JSONParser parser = new JSONParser();
         try {
-            Scanner fileScan = new Scanner(file);
-
-            //Get Map Dimensions
-            this.rows = fileScan.nextInt();
-            this.cols = fileScan.nextInt();
-
-            //Create the Map's Array [row][column]
-            this.map = new int[rows][cols];
-            int count = 0; //Simple counter
-            while (fileScan.hasNext()) this.map[(count / cols)][count++ % (cols)] = fileScan.nextInt();
-
-        } catch (FileNotFoundException e) {
-            System.out.printf("\nWorld File for '%s' Not Found\n", name);
+            Object obj = parser.parse(new FileReader("WorldFiles/" + name + ".json"));
+            JSONObject json = (JSONObject) obj;
+            rows = Integer.valueOf((String) json.get("Rows"));
+            cols = Integer.valueOf((String) json.get("Cols"));
+            JSONArray tiles = (JSONArray) json.get("TileMap");
+            map = new int[rows][cols];
+            int count = 0;
+            for (Object i : tiles) {
+                for (Object j : (List) i) {
+                    map[count / cols][count++ % cols] = Integer.valueOf((String) j);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

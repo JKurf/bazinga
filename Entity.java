@@ -10,22 +10,21 @@ public class Entity {
     private String name; //Entity's Name
     private String ID; //Entity's ID
     Location location;
-
     Texture tex;
 
     //Constructor if nothing (Defaults to TestEntity)
     public Entity() {
-        this("0000", 0, 0, "D");
+        this("0000", 0, 0, Direction.DOWN);
     }
 
     //Constructor if only ID & Direction
-    public Entity(String ID, String dir) {
+    public Entity(String ID, Direction dir) {
         this(ID, 0, 0, dir);
     }
 
     //Constructor if only ID
     public Entity(String ID) {
-        this(ID, 0, 0, "D");
+        this(ID, 0, 0, Direction.DOWN);
     }
 
     /**
@@ -34,7 +33,7 @@ public class Entity {
      * @param x X-Coordinate
      * @param y Y-Coordinate
      */
-    public Entity(String ID, int x, int y, String dir) {
+    public Entity(String ID, int x, int y, Direction dir) {
         this.entityNumber = entityCount++;
         this.ID = ID;
         this.location = new Location(x, y, dir);

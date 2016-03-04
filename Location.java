@@ -3,17 +3,17 @@ public class Location {
     private float y;
     private float xLast;
     private float yLast;
-    private String direction;
+    private Direction direction;
 
     public Location() {
-        this(0, 0, "DOWN");
+        this(0, 0, Direction.DOWN);
     }
 
     public Location(float x, float y) {
-        this(x, y, "DOWN");
+        this(x, y, Direction.DOWN);
     }
 
-    public Location(float x, float y, String direction) {
+    public Location(float x, float y, Direction direction) {
         this.x = x;
         this.y = y;
         this.xLast = x;
@@ -21,7 +21,7 @@ public class Location {
         this.direction = direction;
     }
 
-    public Location(Location loc) {this(loc.xPos(), loc.yPos(), "DOWN");}
+    public Location(Location loc) {this(loc.xPos(), loc.yPos(), Direction.DOWN);}
 
     public float xPos() {
         return x;
@@ -39,7 +39,7 @@ public class Location {
         return yLast;
     }
 
-    public String getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
@@ -51,7 +51,7 @@ public class Location {
         y = coordinate;
     }
 
-    public void setDirection(String dir) {
+    public void setDirection(Direction dir) {
         direction = dir;
     }
 
@@ -60,24 +60,24 @@ public class Location {
         y += dy;
     }
 
-    public void move(String dir) {
-        if (dir.toUpperCase().equals(direction)) {
+    /*public void move(Direction dir) {
+        if (dir == direction) {
             switch (direction) {
-                case "DOWN":
+                case DOWN:
                     y--;
                     break;
-                case "UP":
+                case UP:
                     y++;
                     break;
-                case "LEFT":
+                case LEFT:
                     x--;
                     break;
-                case "RIGHT":
+                case RIGHT:
                     x++;
                     break;
             }
         } else {
-            direction = dir.toUpperCase();
+            direction = dir;
         }
-    }
+    }*/
 }
