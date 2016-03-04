@@ -43,7 +43,7 @@ Wrote tool to generate JSON world files from old format
 
 ***4 March 2016***
 Added MenuItem class  
--MenuItem has string contents to display
--MenuItem has an array of MenuItem children to also dipslay
--Rendered recursively, highlighting the current one
-Implemented system to pass messages up to the game class from deeper classes
+-MenuItem has string contents to display  
+-MenuItem has an array of MenuItem children to also dipslay  
+-Rendered recursively, highlighting the current one  
+Implemented system to pass messages up to the game class from deeper classes  
