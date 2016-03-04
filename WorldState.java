@@ -32,8 +32,8 @@ public class WorldState implements IState{
         if(!initialized) {
             player.loadTexture("Data/TestImg.png");
 
-            player.location.setX(0.0f);
-            player.location.setY(0.0f);
+            player.location.setX(world.xStart);
+            player.location.setY(world.yStart);
 
             initialized = true;
         }
@@ -44,16 +44,16 @@ public class WorldState implements IState{
         float speed = 5.0f;
 
         if(InputClass.isKeyDown(GLFW_KEY_D)) {
-            player.location.move((float)(speed * elapsedTime * GraphicsClass.TILE_WIDTH), 0);
+            player.location.move((float)(speed * elapsedTime * GraphicsClass.TILE_WIDTH), 0, world);
         }
         if(InputClass.isKeyDown(GLFW_KEY_A)) {
-            player.location.move((float)(-speed * elapsedTime * GraphicsClass.TILE_WIDTH), 0);
+            player.location.move((float)(-speed * elapsedTime * GraphicsClass.TILE_WIDTH), 0, world);
         }
         if(InputClass.isKeyDown(GLFW_KEY_W)) {
-            player.location.move(0, (float)(speed * elapsedTime * GraphicsClass.TILE_HEIGHT));
+            player.location.move(0, (float)(speed * elapsedTime * GraphicsClass.TILE_HEIGHT), world);
         }
         if(InputClass.isKeyDown(GLFW_KEY_S)) {
-            player.location.move(0, (float)(-speed * elapsedTime * GraphicsClass.TILE_HEIGHT));
+            player.location.move(0, (float)(-speed * elapsedTime * GraphicsClass.TILE_HEIGHT), world);
         }
 
         if(InputClass.keyPress(GLFW_KEY_SPACE)) {
@@ -79,7 +79,7 @@ public class WorldState implements IState{
         if(drawClip) graphics.drawClip(world);
         graphics.drawEntity(player);
 
-        graphics.drawText(String.format("POSITION:"), graphics.Font, 16, 0, 0, 8.0f, 8.0f);
+        graphics.drawText("POSITION:", graphics.Font, 16, 0, 0, 8.0f, 8.0f);
         graphics.drawText(String.format("(%.1f,%.1f)",player.location.xPos()/16.0f, player.location.yPos()/16.0f), graphics.Font, 16, 0, 8, 8.0f, 8.0f);
 
         String text = world.name;

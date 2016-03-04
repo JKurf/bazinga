@@ -55,29 +55,28 @@ public class Location {
         direction = dir;
     }
 
-    public void move(float dx, float dy) {
-        x += dx;
-        y += dy;
+    public void move(float dx, float dy, World world) {
+        try {
+            if (canMoveX(dx, world)) { x += dx; }
+        } catch (Exception ignored) {}
+        try {
+            if (canMoveY(dy, world)) { y += dy; }
+        } catch (Exception ignored) {}
     }
 
-    public void move(String dir) {
-        if (dir.toUpperCase().equals(direction)) {
-            switch (direction) {
-                case "DOWN":
-                    y--;
-                    break;
-                case "UP":
-                    y++;
-                    break;
-                case "LEFT":
-                    x--;
-                    break;
-                case "RIGHT":
-                    x++;
-                    break;
-            }
+    public boolean canMoveX(float dx, World world) {
+        if (dx < 0) {
+            return !world.clip[(int) (y / 16)][(int) ((x + dx) / 16)];
         } else {
-            direction = dir.toUpperCase();
+            return !world.clip[(int) (y / 16)][(int) ((x + 16 + dx) / 16)];
+        }
+    }
+
+    public boolean canMoveY(float dy, World world) {
+        if (dy < 0) {
+            return !world.clip[(int) ((y + dy) / 16)][(int) (x / 16)];
+        } else {
+            return !world.clip[(int) ((y + 16 + dy) / 16)][(int) (x / 16)];
         }
     }
 }
