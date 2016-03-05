@@ -10,7 +10,6 @@ public class Game {
 
     MenuState menu = new MenuState();
     WorldState World1 = new WorldState("The Black Lagoon");
-    WorldState World2 = new WorldState("The White Lagoon");
 
     String currentWorld = "World1";
 
@@ -22,7 +21,6 @@ public class Game {
 
         SM.Add("Menu", menu);
         SM.Add("World1", World1);
-        SM.Add("World2", World2);
 
         SM.Change("World1");
     }
@@ -52,6 +50,15 @@ public class Game {
                     SM.Change("World1");
                     currentWorld = "World1";
                 }
+            }
+            if(act.startsWith("battle:")) {
+                String ent = act.substring(7);
+                System.out.println("Battle Started with Entity " + ent);
+
+                BattleState battle = new BattleState(World1.player,World1.world.mobs[Integer.valueOf(ent)]);
+
+                SM.Add("battle", battle);
+                SM.Change("battle");
             }
         }
     }
