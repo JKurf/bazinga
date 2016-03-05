@@ -7,12 +7,13 @@ public class BattleState implements IState {
     boolean Initialized = false;
     String action = null;
 
-    Entity e;
+    Mob e;
 
-    public BattleState(Player P, Entity E) {
+    public BattleState(Player P, Mob E) {
         //System.out.println(ID);
-        System.out.println(P.getID() + " Battling " + E.getID());
+        System.out.println("Battling ");
         e = E;
+        System.out.println("Enemy Health: " + e.getHealth());
     }
 
     @Override
@@ -27,8 +28,14 @@ public class BattleState implements IState {
     @Override
     public void Update(double elapsedTime) {
         if(InputClass.keyPress(GLFW_KEY_SPACE)) {
-            e.location.setX(-20);
-            action = "resume";
+                e.damage(15);
+                System.out.println("Enemy Health: " + e.getHealth());
+
+                if(e.getHealth() <= 0) {
+                    e.location.setX(-10);
+                    action = "resume";
+                    System.out.println("dead");
+            }
         }
     }
 
