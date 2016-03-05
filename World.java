@@ -11,8 +11,8 @@ public class World {
     boolean[][] clip; //Map's Collisions
     int rows; //Rows of Map's Array
     int cols; //Columns of Map's Array
-    float xStart = 16.0f;
-    float yStart = 16.0f;
+    float xStart = 1.5f;
+    float yStart = 1.5f;
 
     /**
      * This Constructor only needs the World Name, and will use the method 'getMapData' to load the world

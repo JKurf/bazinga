@@ -16,9 +16,9 @@ import java.nio.IntBuffer;
 public class GraphicsClass {
     static final int TILE_HEIGHT = 16;
     static final int TILE_WIDTH = 16;
-    static int WIDTH = (int)(160 * 2);
-    static int HEIGHT = (int)(160 * 2);
-    static final float zoom = 2.0f;
+    static int WIDTH = (int)(160 * 4);
+    static int HEIGHT = (int)(160 * 4);
+    static float zoom = 3.0f;
 
     int TileMap_WIDTH;
     int TileMap_HEIGHT;
@@ -38,10 +38,6 @@ public class GraphicsClass {
 
     // The window handle
     private long window;
-
-    public long getWindow() {
-        return window;
-    }
 
     public void Init() {
         glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
@@ -88,7 +84,7 @@ public class GraphicsClass {
 
         GL.createCapabilities();
 
-        glClearColor(0.8f, 0.666667f, 1.0f, 0.0f);
+        glClearColor(130.0f/255.0f, 105.0f / 255.0f, 83.0f / 255.0f, 0.0f);
 
         glEnable(GL11.GL_TEXTURE_2D);
 
@@ -111,13 +107,6 @@ public class GraphicsClass {
         TileMap_HEIGHT = TileMap.getImageHeight();
         TileMap_NUM_TILES_X = TileMap_WIDTH / TILE_WIDTH;
         TileMap_NUM_TILES_Y= TileMap_HEIGHT / TILE_HEIGHT;
-
-
-        /*try {
-            Font = textureLoader.getTexture("Data/font.png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
         Font = loadTexture(FontFilename);
     }
@@ -147,7 +136,7 @@ public class GraphicsClass {
         tex.bind();
 
         // translate to the right location and prepare to draw
-        glTranslatef(world2ScreenX(x) - TILE_WIDTH/2, world2ScreenY(y) + TILE_HEIGHT/2, 0);
+        glTranslatef(world2ScreenX(x) - TILE_WIDTH/2*zoom, world2ScreenY(y) + TILE_HEIGHT/2*zoom, 0);
         glColor3f(1,1,1);
 
         // draw a quad textured to match the sprite
@@ -156,11 +145,11 @@ public class GraphicsClass {
             glTexCoord2f(u1, v1);       //uv
             glVertex2f(0, 0);               //xy
             glTexCoord2f(u1, v2);       //uv
-            glVertex2f(0, h);              //xy
+            glVertex2f(0, h*zoom);              //xy
             glTexCoord2f(u2, v2);       //uv
-            glVertex2f(w, h);             //xy
+            glVertex2f(w*zoom, h*zoom);             //xy
             glTexCoord2f(u2, v1);       //uv
-            glVertex2f(w,0);               //xy
+            glVertex2f(w*zoom,0);               //xy
         }
         GL11.glEnd();
 
@@ -172,18 +161,18 @@ public class GraphicsClass {
         for (int j = 0; j < world.rows; j++) {
             for (int i = 0; i < world.cols; i++) {
 
-                int worldSizeX = world.cols * TILE_WIDTH;
-                int worldSizeY = world.rows * TILE_HEIGHT;
+                int worldSizeX = world.cols;
+                int worldSizeY = world.rows;
 
-                int drawx = (i * TILE_WIDTH);
-                int drawy = worldSizeY - (j * TILE_HEIGHT);
+                int drawx = (i);
+                int drawy = worldSizeY - (j);
 
                 int ID = world.map[j][i];
                 int sheetx = (ID % TileMap_NUM_TILES_X) * TILE_WIDTH;
                 int sheety = (ID / TileMap_NUM_TILES_Y) * TILE_HEIGHT;
 
                 draw(sheetx, sheety, sheetx + TILE_WIDTH, sheety + TILE_HEIGHT,
-                        drawx, drawy, (int)(TILE_WIDTH), (int)(TILE_HEIGHT), TileMap);
+                        drawx, drawy, (TILE_WIDTH), (TILE_HEIGHT), TileMap);
             }
         }
     }
@@ -192,11 +181,11 @@ public class GraphicsClass {
         for (int j = 0; j < world.rows; j++) {
             for (int i = 0; i < world.cols; i++) {
 
-                int worldSizeX = world.cols * TILE_WIDTH;
-                int worldSizeY = world.rows * TILE_HEIGHT;
+                int worldSizeX = world.cols;
+                int worldSizeY = world.rows;
 
-                int drawx = (i * TILE_WIDTH);
-                int drawy = worldSizeY - (j * TILE_HEIGHT);
+                int drawx = (i);
+                int drawy = worldSizeY - (j);
 
                 //draw(sheetx, sheety, sheetx + TILE_WIDTH, sheety + TILE_HEIGHT,
                 //        drawx, drawy, (int)(TILE_WIDTH), (int)(TILE_HEIGHT), TileMap);
@@ -251,20 +240,21 @@ public class GraphicsClass {
 
         // translate to the right location and prepare to draw
         //glTranslatef(world2ScreenX(x), world2ScreenX(y), 0);
-        glTranslatef(world2ScreenX(x) - TILE_WIDTH/2, world2ScreenY(y) + TILE_HEIGHT/2, 0);
-        glColor3f(1,0,0);
+        glTranslatef(world2ScreenX(x) - TILE_WIDTH/2*zoom, world2ScreenY(y) + TILE_HEIGHT/2*zoom, 0);
+        glColor4f(1,0,0, 0.5f);
 
         glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+        //glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
         // draw a quad textured to match the sprite
         glBegin(GL11.GL_QUADS);
         {
             glVertex2f(0, 0);
-            glVertex2f(0, h);
-            glVertex2f(w, h);
-            glVertex2f(w, 0);
+            glVertex2f(0, h*zoom);
+            glVertex2f(w*zoom, h*zoom);
+            glVertex2f(w*zoom, 0);
         }
         GL11.glEnd();
 
@@ -276,13 +266,13 @@ public class GraphicsClass {
     }
 
     public void drawEntity(Entity ent) {
-        draw(16, 16, 32, 32, ent.location.xPos(), (ent.location.yPos() + TILE_HEIGHT), 16, 16, ent.tex);
+        draw(16, 16, 32, 32, ent.location.xPos(), (ent.location.yPos() + 1), TILE_WIDTH, TILE_HEIGHT, ent.tex);
     }
 
     public void drawText(String str, Texture tex, int gridSize, float x, float y,
                          float W, float H){
-        float w = W * zoom;
-        float h = H * zoom;
+        float w = W * 2.0f;
+        float h = H * 2.0f;
 
         String strUp = str.toUpperCase();
 
@@ -331,13 +321,64 @@ public class GraphicsClass {
         glPopMatrix();
     }
 
+    public void drawText(String str, float x, float y){
+        float w = 8.0f * 2.0f;
+        float h = 8.0f * 2.0f;
+
+        String strUp = str.toUpperCase();
+
+        glPushMatrix();
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+
+        Font.bind();
+
+        glTranslatef(x, y, 0);
+        glBegin(GL_QUADS);
+
+        for (int i = 0; i < str.length(); i++) {
+            //int asciiCode = (int) str.charAt(i);
+            int asciiCode = customAscii(strUp.charAt(i));
+            final float cellSize = 1.0f / 16;
+            float cellX = ((int) asciiCode % 16) * cellSize;
+            float cellY = ((int) asciiCode / 16) * cellSize;
+
+            /*
+            glTexCoord2f(cellX, cellY);
+            glVertex2f(i * w / 3, y);
+            glTexCoord2f(cellX + cellSize, cellY);
+            glVertex2f(i * w / 3 + w / 2, y);
+            glTexCoord2f(cellX + cellSize, cellY + cellSize);
+            glVertex2f(i * w / 3 + w / 2, y + h);
+            glTexCoord2f(cellX, cellY + cellSize);
+            glVertex2f(i * w / 3, y + h);
+            */
+
+            glTexCoord2f(cellX, cellY);
+            glVertex2f(i * w, y);
+            glTexCoord2f(cellX + cellSize, cellY);
+            glVertex2f(i * w + w, y);
+            glTexCoord2f(cellX + cellSize, cellY + cellSize);
+            glVertex2f(i * w + w, y + h);
+            glTexCoord2f(cellX, cellY + cellSize);
+            glVertex2f(i * w, y + h);
+        }
+
+        glEnd();
+
+        glDisable(GL_BLEND);
+
+        glPopMatrix();
+    }
+
     public void drawTextMenu(String str, float x, float y, boolean highlight){
         float W = 8.0f;
         float H = 8.0f;
         int gridSize = 16;
 
-        float w = W * zoom;
-        float h = H * zoom;
+        float w = W * 2.0f;
+        float h = H * 2.0f;
 
         int L = str.length();
 
@@ -405,27 +446,17 @@ public class GraphicsClass {
     }
 
     public float world2ScreenX(float x) {
-        return (x - Camera.x + WIDTH/2);
+        return ((x - Camera.x)*TILE_WIDTH*zoom + WIDTH/2);
     }
 
     public float world2ScreenY(float y) {
-        return -y + Camera.y + HEIGHT/2;
+        return ((-y + Camera.y)*TILE_HEIGHT*zoom + HEIGHT/2);
     }
 
     public void clearScreen() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-
-        /*
-        glfwGetWindowSize(window, w, h);
-        WIDTH = w.get(0);
-        HEIGHT = h.get(0);
-
-        System.out.println(WIDTH);
-        System.out.println(HEIGHT);
-        */
+        glDisable(GL_BLEND);
     }
 
     public void updateScreen() {
@@ -440,15 +471,15 @@ public class GraphicsClass {
         // store the current model matrix
         glPushMatrix();
 
-        int I = (int)Math.floor(ent.location.xPos() / 16);
-        int J = (int)Math.floor(ent.location.yPos() / 16);
+        int I = (int)Math.floor(ent.location.xPos() / TILE_WIDTH);
+        int J = (int)Math.floor(ent.location.yPos() / TILE_HEIGHT);
 
         // translate to the right location and prepare to draw
         glTranslatef(world2ScreenX(I*TILE_WIDTH - TILE_WIDTH/2), world2ScreenY(J*TILE_HEIGHT + TILE_HEIGHT/2), 0);
-        glColor3f(0.5f,0,0.5f);
+        glColor4f(0,0,1, 0.5f);
 
         glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_DST_COLOR);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         int[] Dx = {1, 1, 0, 0};
         int[] Dy = {0, -1, -1, 0};
@@ -502,5 +533,9 @@ public class GraphicsClass {
 
         ascii = (int)c;
         return ascii;
+    }
+
+    public long getWindow() {
+        return window;
     }
 }
