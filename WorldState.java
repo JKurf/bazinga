@@ -75,7 +75,7 @@ public class WorldState implements IState{
 
         for(int n = 0; n < 4; n ++) {
             if (Math.sqrt(Math.pow(player.location.xPos() - world.mobs[n].location.xPos(),2) + Math.pow(player.location.yPos() - world.mobs[n].location.yPos(),2)) < 1) {
-                        action = "battle:" + world.mobs[n].getID();
+                        action = "battle:" + Integer.toString(n);
             }
         }
     }

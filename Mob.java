@@ -33,4 +33,9 @@ public class Mob extends Entity {
         a = (cap - start) / (levelCap * a);
         return (int) (a * level * Math.pow(1.0 + b, level)) + start;
     }
+
+    public int getLevel() {return level;}
+
+    public int getHealth() {return health;}
+    public void damage(int dmg) {health -= dmg;}
 }
