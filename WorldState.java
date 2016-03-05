@@ -74,12 +74,12 @@ public class WorldState implements IState{
         if(drawClip) graphics.drawClip(world);
         graphics.drawEntity(player);
 
-        graphics.drawText("POSITION!", graphics.Font, 16, 0, 0, 8.0f, 8.0f);
-        graphics.drawText(String.format("(%.1f,%.1f)",player.location.xPos(), player.location.yPos()), graphics.Font, 16, 0, 8, 8.0f, 8.0f);
+        graphics.drawText("POSITION!", 0, 0);
+        graphics.drawText(String.format("(%.1f,%.1f)",player.location.xPos(), player.location.yPos()), 0, 8);
 
         String text = world.name;
 
-        graphics.drawText(text, graphics.Font, 16, 0, 16, 8, 8);
+        graphics.drawText(text, 0, 16);
         //graphics.highlightTile(player);
 
         //graphics.drawText(String.format("ABC DEF"), graphics.Font, 8, 0, 0, 8.0f, 8.0f);

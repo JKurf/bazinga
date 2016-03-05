@@ -322,8 +322,8 @@ public class GraphicsClass {
     }
 
     public void drawText(String str, float x, float y){
-        float w = TILE_WIDTH * 2.0f;
-        float h = TILE_HEIGHT * 2.0f;
+        float w = 8.0f * 2.0f;
+        float h = 8.0f * 2.0f;
 
         String strUp = str.toUpperCase();
 
