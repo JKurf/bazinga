@@ -85,6 +85,7 @@ public class WorldState implements IState{
         String text = world.name;
 
         graphics.drawText(text, graphics.Font, 16, 0, 16, 8, 8);
+        //graphics.highlightTile(player);
 
         //graphics.drawText(String.format("ABC DEF"), graphics.Font, 8, 0, 0, 8.0f, 8.0f);
     }
