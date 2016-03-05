@@ -13,6 +13,7 @@ public class World {
     int cols; //Columns of Map's Array
     float xStart = 1.5f;
     float yStart = 1.5f;
+    Mob[] mobs;
 
     /**
      * This Constructor only needs the World Name, and will use the method 'getMapData' to load the world
@@ -45,6 +46,36 @@ public class World {
                 for (Object j : (List) i) {
                     clip[count / cols][count++ % cols] = (j.equals("1"));
                 }
+            }
+            JSONArray mobArray = (JSONArray) json.get("Mobs");
+            int a = mobArray.toArray().length;
+            mobs = new Mob[mobArray.toArray().length];
+            count = 0;
+            for (Object i : (List) mobArray) {
+                int count2 = 0;
+                String[] entry = new String[5];
+                for (Object j : (List) i) {
+                    entry[count2++] = j.toString();
+                }
+                Direction d;
+                switch (entry[4]) {
+                    case "D":
+                        d = Direction.DOWN;
+                        break;
+                    case "U":
+                        d = Direction.UP;
+                        break;
+                    case "L":
+                        d = Direction.LEFT;
+                        break;
+                    case "R":
+                        d = Direction.RIGHT;
+                        break;
+                    default:
+                        d = Direction.DOWN;
+                        break;
+                }
+                mobs[count++] = new Mob(entry[0], Integer.valueOf(entry[1]), Integer.valueOf(entry[2]), Integer.valueOf(entry[3]), d);
             }
         } catch (Exception e) {
             e.printStackTrace();

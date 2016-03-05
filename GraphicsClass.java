@@ -430,21 +430,6 @@ public class GraphicsClass {
         glPopMatrix();
     }
 
-    public Location world2Screen(Location loc) {
-        Location ret = new Location();
-
-        //x = cx - (w/2 - u);
-        //y = cy + (h/2 - v);
-
-        //x - cx + w/2 = u
-        //-y + cy + h/2 = v
-
-        ret.setX(loc.xPos() - Camera.x + WIDTH/2);
-        ret.setX(-loc.yPos() + Camera.y + HEIGHT/2);
-
-        return ret;
-    }
-
     public float world2ScreenX(float x) {
         return ((x - Camera.x)*TILE_WIDTH*zoom + WIDTH/2);
     }
