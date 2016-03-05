@@ -37,7 +37,7 @@ public class MenuState implements IState {
             activeC++;
         }
 
-        if(InputClass.keyPress(GLFW_KEY_E)) {
+        if(InputClass.keyPress(GLFW_KEY_D)) {
             if(root.current.equals("quit")) {
                 action = "quit";
             }

@@ -14,12 +14,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.nio.IntBuffer;
 
 public class GraphicsClass {
-    /*
-    final int renderOffsetX = 8;
-    final int renderOffsetY = 31;
-    int xOffset = 16;
-    int yOffset = 16;
-    */
     static final int TILE_HEIGHT = 16;
     static final int TILE_WIDTH = 16;
     static int WIDTH = (int)(160 * 2);
@@ -139,7 +133,7 @@ public class GraphicsClass {
     }
 
     public void draw(int sx1, int sy1, int sx2, int sy2,
-                     int x, int y, int w, int h, Texture tex) {
+                     float x, float y, float w, float h, Texture tex) {
 
         float u1 = (float)sx1 / getPow2(tex.getImageWidth());
         float v1 = (float)sy1 / getPow2(tex.getImageHeight());
@@ -282,7 +276,7 @@ public class GraphicsClass {
     }
 
     public void drawEntity(Entity ent) {
-        draw(16, 16, 32, 32, (int)ent.location.xPos(), (int)(ent.location.yPos() + TILE_HEIGHT), (int)(16), (int)(16), ent.tex);
+        draw(16, 16, 32, 32, ent.location.xPos(), (ent.location.yPos() + TILE_HEIGHT), 16, 16, ent.tex);
     }
 
     public void drawText(String str, Texture tex, int gridSize, float x, float y,
@@ -440,6 +434,41 @@ public class GraphicsClass {
         // Poll for window events. The key callback above will only be
         // invoked during this call.
         glfwPollEvents();
+    }
+
+    public void highlightTile(Entity ent) {
+        // store the current model matrix
+        glPushMatrix();
+
+        int I = (int)Math.floor(ent.location.xPos() / 16);
+        int J = (int)Math.floor(ent.location.yPos() / 16);
+
+        // translate to the right location and prepare to draw
+        glTranslatef(world2ScreenX(I*TILE_WIDTH - TILE_WIDTH/2), world2ScreenY(J*TILE_HEIGHT + TILE_HEIGHT/2), 0);
+        glColor3f(0.5f,0,0.5f);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_DST_COLOR);
+
+        int[] Dx = {1, 1, 0, 0};
+        int[] Dy = {0, -1, -1, 0};
+
+        // draw a quad textured to match the sprite
+        glBegin(GL11.GL_QUADS);
+        {
+            for(int n = 0; n < 4; n ++) {
+                glVertex2f(Dx[n]*TILE_WIDTH, Dy[n]*TILE_HEIGHT);                            //xy
+                glVertex2f(Dx[n]*TILE_WIDTH, Dy[n]*TILE_HEIGHT + TILE_HEIGHT);              //xy
+                glVertex2f(Dx[n]*TILE_WIDTH + TILE_WIDTH, Dy[n]*TILE_HEIGHT + TILE_HEIGHT); //xy
+                glVertex2f(Dx[n]*TILE_WIDTH + TILE_WIDTH,Dy[n]*TILE_HEIGHT);                //xy
+            }
+        }
+        GL11.glEnd();
+
+        glDisable(GL_BLEND);
+
+        // restore the model view matrix to prevent contamination
+        GL11.glPopMatrix();
     }
 
     public void Quit() {
