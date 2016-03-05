@@ -39,7 +39,7 @@ public class Player extends Entity {
                   int health, int maxHealth, int maxHealthBuffed,
                   int expCurrent, int expNeeded, int expTotal,
                   int level) {
-        super("0001");
+        super("0001", 0, 0, Direction.DOWN, false);
         this.name = name;
         this.spec = spec;
         this.level = level;
@@ -72,7 +72,7 @@ public class Player extends Entity {
                   int expCurrent, int expNeeded, int expTotal,
                   int level,
                   int resFire, int resIce, int resMagic) {
-        super("0001");
+        super("0001", 0, 0, Direction.DOWN, false);
         this.name = name;
         this.spec = spec;
         this.level = level;

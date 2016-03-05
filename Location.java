@@ -3,25 +3,15 @@ public class Location {
     private float y;
     private float xLast;
     private float yLast;
-    private String direction;
+    private Direction direction;
 
-    public Location() {
-        this(0, 0, "DOWN");
-    }
-
-    public Location(float x, float y) {
-        this(x, y, "DOWN");
-    }
-
-    public Location(float x, float y, String direction) {
+    public Location(float x, float y, Direction direction) {
         this.x = x;
         this.y = y;
         this.xLast = x;
         this.yLast = y;
         this.direction = direction;
     }
-
-    public Location(Location loc) {this(loc.xPos(), loc.yPos(), "DOWN");}
 
     public float xPos() {
         return x;
@@ -39,7 +29,7 @@ public class Location {
         return yLast;
     }
 
-    public String getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
@@ -51,92 +41,29 @@ public class Location {
         y = coordinate;
     }
 
-    public void setDirection(String dir) {
+    public void setDirection(Direction dir) {
         direction = dir;
     }
 
     public void move(float dx, float dy, World world) {
-        /*try {
-            if (canMoveX(dx, world)) { x += dx; }
-        } catch (Exception ignored) {
-            System.out.print("");
-        }
-        try {
-            if (canMoveY(dy, world)) { y += dy; }
-        } catch (Exception ignored) {
-            System.out.print("");
-        }*/
         if(canMove(dx, dy, world)) {
+            xLast = x;
+            yLast = y;
             x += dx;
             y += dy;
         }
     }
 
     public boolean canMove(float dx, float dy, World world) {
-        /*
-        if(world.clip[-1 + world.rows - (int)((y + dy + 4) / 16)][(int)((x + dx + 4) / 16)]) {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 12) / 16)][(int)((x + dx + 4) / 16)]) {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 12) / 16)][(int)((x + dx + 12) / 16)]) {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 4) / 16)][(int)((x + dx + 12) / 16)]) {return false;}
-        */
-
-        if(world.clip[-1 + world.rows - (int)((y + dy + 1.0f/16.0f))]     [(int)((x + dx + 1.0f/16.0f))])   {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 15.0f/16.0f))]    [(int)((x + dx + 1.0f/16.0f))])   {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 15.0f/16.0f))]    [(int)((x + dx + 15.0f/16.0f))])  {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 1.0f/16.0f))]     [(int)((x + dx + 15.0f/16.0f))])  {return false;}
-
+        if(world.clip[-1 + world.rows - (int)((y + dy + 1.0f/16.0f))][(int)((x + dx + 1.0f/16.0f))])   {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + 15.0f/16.0f))][(int)((x + dx + 1.0f/16.0f))])   {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + 15.0f/16.0f))][(int)((x + dx + 15.0f/16.0f))])  {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + 1.0f/16.0f))][(int)((x + dx + 15.0f/16.0f))])  {return false;}
         return true;
     }
 
-    public boolean canMoveX(float dx, World world) {
-        /*if (dx < 0) {
-            return !world.clip[(int)Math.floor(y / 16)][(int)Math.floor((x + dx) / 16)];
-        } else {
-            return !world.clip[(int)Math.floor(y / 16)][(int)Math.floor((x + dx + 16) / 16)];
-        }*/
-        /*int I = (int)Math.floor(x / 16);
-        int J = (int)Math.floor(y / 16);
+    public boolean inEntity(float dx, float dy, Location entityLocation, Location playerLocation) {
 
-        boolean left, right;
-        left = world.clip[I-1][J];
-        right = world.clip[I+1][J];
-
-        /*if(dx > 0) {
-            //return right;
-            System.out.println("Can't move Right");
-            return true;
-        }
-        else {
-            //return left;
-            System.out.println("Can't move Left");
-            return true;
-        }*/
-        return true;
-    }
-
-    public boolean canMoveY(float dy, World world) {
-        /*if (dy < 0) {
-            return !world.clip[(int)Math.floor((y + dy) / 16)][(int)Math.floor((x) / 16)];
-        } else {
-            return !world.clip[(int)Math.floor((y + dy + 16) / 16)][(int)Math.floor((x) / 16)];
-        }*/
-        /*int I = (int)Math.floor(x / 16);
-        int J = (int)Math.floor(y / 16);
-
-        boolean up, down;
-        up = world.clip[I][J+1];
-        down = world.clip[I][J-1];
-
-        /*if(dy > 0) {
-            //return up;
-            System.out.println("Can't move Up");
-            return true;
-        }
-        else {
-            //return down;
-            System.out.println("Can't move Down");
-            return true;
-        }*/
         return true;
     }
 }

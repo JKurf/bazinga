@@ -1,2 +1,3 @@
 0000 TestEntity
 0001 Player
+0002 Skeleton 100 100 350 1000

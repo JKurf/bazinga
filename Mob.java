@@ -1,26 +1,25 @@
+import java.util.Scanner;
+
 /**
  * @author Jack Kurfman
  * @version 3/2/2016.
  */
-public class Mob {
+public class Mob extends Entity {
 
-    public static void main(String[] args) {
-        Mob[] Skeleton = new Mob[10];
-        for (int i = 0; i < 10; i++) {
-            Skeleton[i] = new Mob("Zombie", i + 1, 10, 10, 90, 100);
-            System.out.printf("\nlvl %d: %d", i + 1, Skeleton[i].health);
-        }
-    }
-
-    private String name;
     private int level;
     private int levelCap;
     private int health; //Mob Health
+    Scanner lineScan = new Scanner(this.lineEntry);
 
-    public Mob(String name, int level, int levelCap, int healthStart, int healthMid, int healthCap) {
-        this.name = name;
+    public Mob(String ID, int level, int x, int y, Direction dir) {
+        super(ID, x, y, dir, true);
         this.level = level;
-        this.levelCap = levelCap;
+        int dummy = lineScan.nextInt();
+        String summy = lineScan.next();
+        this.levelCap = lineScan.nextInt();
+        int healthStart = lineScan.nextInt();
+        int healthMid = lineScan.nextInt();
+        int healthCap = lineScan.nextInt();
         this.health = statFunction(healthStart, healthMid, healthCap);
     }
 
