@@ -15,6 +15,8 @@ public class World {
     float yStart = 1.5f;
     Mob[] mobs;
 
+    Entity[] mobs;
+
     /**
      * This Constructor only needs the World Name, and will use the method 'getMapData' to load the world
      * @param name Name of the World
@@ -22,6 +24,9 @@ public class World {
     public World(String name) {
         this.name = name;
         getMapData();
+
+
+        mobs = new Entity[4];
     }
 
     public void getMapData() {
@@ -79,6 +84,15 @@ public class World {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void Init() {
+        for(int n = 0; n < 4; n ++) {
+            mobs[n] = new Entity(Integer.toString(n), "1");
+            mobs[n].location.setX(4*n + 4);
+            mobs[n].location.setY(4);
+            mobs[n].loadTexture("Data/Char01.png");
         }
     }
 }

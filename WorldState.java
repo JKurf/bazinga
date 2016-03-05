@@ -30,6 +30,12 @@ public class WorldState implements IState{
             player.location.setX(world.xStart);
             player.location.setY(world.yStart);
 
+            //enemy.loadTexture("Data/Char01.png");
+            //enemy.location.setX(5);
+            //enemy.location.setY(5);
+
+            world.Init();
+
             initialized = true;
         }
     }
@@ -66,6 +72,12 @@ public class WorldState implements IState{
             Camera.x = player.location.xPos();
             Camera.y = player.location.yPos();
         }
+
+        for(int n = 0; n < 4; n ++) {
+            if (Math.sqrt(Math.pow(player.location.xPos() - world.mobs[n].location.xPos(),2) + Math.pow(player.location.yPos() - world.mobs[n].location.yPos(),2)) < 1) {
+                        action = "battle:" + world.mobs[n].getID();
+            }
+        }
     }
 
     @Override
@@ -73,6 +85,9 @@ public class WorldState implements IState{
         graphics.drawWorld(world);
         if(drawClip) graphics.drawClip(world);
         graphics.drawEntity(player);
+        for(int n = 0; n < 4; n ++) {
+            graphics.drawEntity(world.mobs[n]);
+        }
 
         graphics.drawText("POSITION!", 0, 0);
         graphics.drawText(String.format("(%.1f,%.1f)",player.location.xPos(), player.location.yPos()), 0, 8);
