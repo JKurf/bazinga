@@ -74,28 +74,16 @@ public class Location {
 
     public boolean canMove(float dx, float dy, World world) {
         /*
-        if(world.clip[(int)((x + dx) / 16)][(int)((y + dy) / 16)]) {return false;}
-        if(world.clip[(int)((x + dx) / 16)][(int)((y + dy + 10) / 16)]) {return false;}
-        if(world.clip[(int)((x + dx + 10) / 16)][(int)((y + dy + 10) / 16)]) {return false;}
-        if(world.clip[(int)((x + dx + 10) / 16)][(int)((y + dy) / 16)]) {return false;}
-        */
-
-        /*for(int j = 0; j < world.rows; j ++) {
-            for (int i = 0; i < world.cols; i ++) {
-                if((world.clip[j][i])) {
-                    System.out.print(1);
-                }
-                else {
-                    System.out.print(0);
-                }
-            }
-            System.out.println();
-        }*/
-
         if(world.clip[-1 + world.rows - (int)((y + dy + 4) / 16)][(int)((x + dx + 4) / 16)]) {return false;}
         if(world.clip[-1 + world.rows - (int)((y + dy + 12) / 16)][(int)((x + dx + 4) / 16)]) {return false;}
         if(world.clip[-1 + world.rows - (int)((y + dy + 12) / 16)][(int)((x + dx + 12) / 16)]) {return false;}
         if(world.clip[-1 + world.rows - (int)((y + dy + 4) / 16)][(int)((x + dx + 12) / 16)]) {return false;}
+        */
+
+        if(world.clip[-1 + world.rows - (int)((y + dy + 1.0f/16.0f))]     [(int)((x + dx + 1.0f/16.0f))])   {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + 15.0f/16.0f))]    [(int)((x + dx + 1.0f/16.0f))])   {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + 15.0f/16.0f))]    [(int)((x + dx + 15.0f/16.0f))])  {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + 1.0f/16.0f))]     [(int)((x + dx + 15.0f/16.0f))])  {return false;}
 
         return true;
     }

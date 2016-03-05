@@ -9,7 +9,7 @@ public class Game {
     StateMachine SM = new StateMachine();
 
     MenuState menu = new MenuState();
-    WorldState World1 = new WorldState("The Black Lagoon");
+    WorldState World1 = new WorldState("Collision Test");
     WorldState World2 = new WorldState("The White Lagoon");
 
     String currentWorld = "World1";
