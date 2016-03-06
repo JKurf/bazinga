@@ -1,17 +1,35 @@
 //#bangpoundben
 
 import static org.lwjgl.glfw.GLFW.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.FileReader;
+import java.util.List;
 
 public class Game {
     GraphicsClass graphics = new GraphicsClass();
 
-    InputClass input = new InputClass();
     StateMachine SM = new StateMachine();
 
-    MenuState menu = new MenuState();
-    WorldState World1 = new WorldState("The Black Lagoon");
+    MenuState pause = new MenuState(new String[] {
+            "resume",
+            "settings",
+            "change world",
+            "quit"
+    });
 
-    String currentWorld = "World1";
+    MenuState settings = new MenuState(new String[] {
+            "game",
+            "video",
+            "audio",
+            "back"
+    });
+    
+    WorldState[] worlds;// = new WorldState[4];
+    int world = 0;
+    int numWorlds = 0;
 
     public Game() {
     }
@@ -19,15 +37,14 @@ public class Game {
     public void Init() {
         graphics.Init();
 
-        SM.Add("Menu", menu);
-        SM.Add("World1", World1);
+        loadWorlds("WorldFiles/Worlds.json");
 
-        SM.Change("World1");
+        SM.Push(worlds[0]);
     }
 
     public void Update(double elapsedTime) {
         InputClass.Update(elapsedTime);
-        if(input.isKeyDown(GLFW_KEY_Q) || input.isKeyDown(GLFW_KEY_ESCAPE)) {
+        if(InputClass.isKeyDown(GLFW_KEY_Q) || InputClass.isKeyDown(GLFW_KEY_ESCAPE)) {
             glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
         }
 
@@ -37,28 +54,31 @@ public class Game {
                 glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
             }
             if (act.equals("pause")) {
-                SM.Change("Menu");
+                SM.Push(pause);
             }
             if(act.equals("resume")) {
-                SM.Change(currentWorld);
+                SM.Pop();
             }
-            if(act.equals("change")) {
-                if(currentWorld == "World1") {
-                    SM.Change("World2");
-                    currentWorld = "World2";
-                } else {
-                    SM.Change("World1");
-                    currentWorld = "World1";
+            if(act.equals("settings")) {
+                SM.Push(settings);
+            }
+            if(act.equals("back")) {
+                SM.Pop();
+            }
+            if(act.equals("change world")) {
+                if(++world > numWorlds-1) {
+                    world = 0;
                 }
+
+                SM.Push(worlds[world]);
             }
             if(act.startsWith("battle:")) {
                 String ent = act.substring(7);
                 System.out.println("Battle Started with Entity " + ent);
 
-                BattleState battle = new BattleState(World1.player,World1.world.mobs[Integer.valueOf(ent)]);
+                BattleState battle = new BattleState(worlds[world].player,worlds[world].world.mobs[Integer.valueOf(ent)]);
 
-                SM.Add("battle", battle);
-                SM.Change("battle");
+                SM.Push(battle);
             }
         }
     }
@@ -67,12 +87,10 @@ public class Game {
         graphics.clearScreen();
 
         SM.Render(graphics);
-        //graphics.drawPoints(new Location[] {new Location(GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/2)});
-
-        //graphics.drawText("Lmao This is some awesome Text :^)", graphics.Font, 16, 0, 0, 16.0f, 16.0f);
 
         String FPS = String.format("fps:%.1f", GameClient.fps);
         graphics.drawText(FPS, graphics.Font, 16, GraphicsClass.WIDTH/2, 0, 8.0f, 8.0f);
+        graphics.drawText(String.format("%d", world), graphics.Font, 16, GraphicsClass.WIDTH/2, 8, 8.0f, 8.0f);
 
         graphics.updateScreen();
     }
@@ -81,5 +99,29 @@ public class Game {
         SM.Quit();
         graphics.Quit();
         System.out.printf("\nQuitso");
+    }
+
+    public void loadWorlds(String filename) {
+        JSONParser parser = new JSONParser();
+        try {
+            FileReader a = new FileReader(filename);
+            Object obj = parser.parse(a);
+            JSONObject json = (JSONObject) obj;
+            numWorlds = Integer.valueOf((String) json.get("num_worlds"));
+            JSONArray worlds_Data = (JSONArray) json.get("worlds");
+            worlds = new WorldState[numWorlds];
+            int count = 0;
+            for (Object i : worlds_Data) {
+                String S = null;
+                for (Object j : (List) i) {
+                    S = j.toString();
+                }
+                worlds[count] = new WorldState(S);
+                worlds[count].Init();
+                count++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

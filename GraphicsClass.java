@@ -1,4 +1,3 @@
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -11,14 +10,12 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import java.nio.IntBuffer;
-
 public class GraphicsClass {
     static final int TILE_HEIGHT = 16;
     static final int TILE_WIDTH = 16;
     static int WIDTH = (int)(160 * 4);
     static int HEIGHT = (int)(160 * 4);
-    static float zoom = 3.0f;
+    static float zoom = 2.0f;
 
     int TileMap_WIDTH;
     int TileMap_HEIGHT;
@@ -52,7 +49,7 @@ public class GraphicsClass {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(WIDTH, HEIGHT, "Epic Game", NULL, NULL);
+        window = glfwCreateWindow(WIDTH, HEIGHT, "Eric Game", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
