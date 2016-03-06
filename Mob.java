@@ -6,9 +6,9 @@ import java.util.Scanner;
  */
 public class Mob extends Entity {
 
-    private int level;
+    int level;
     private int levelCap;
-    private int health; //Mob Health
+    int health; //Mob Health
     Scanner lineScan = new Scanner(this.lineEntry);
     boolean alive = true;
 

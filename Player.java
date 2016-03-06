@@ -119,6 +119,8 @@ public class Player extends Entity {
         return (expCurrent <= expNeeded);
     }
 
+    public int getLevel() {return level;}
+
     public void levelUp() {
         expCurrent -= expNeeded;
         expNeeded = expNeeded + (100 * level++);

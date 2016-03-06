@@ -11,7 +11,7 @@ import java.util.List;
 public class Game {
     GraphicsClass graphics = new GraphicsClass();
 
-    StateMachine SM = new StateMachine();
+    StateStack SM = new StateStack();
 
     MenuState pause = new MenuState(new String[] {
             "resume",
@@ -26,8 +26,13 @@ public class Game {
             "audio",
             "back"
     });
+
+    MenuState mainMenu = new MenuState(new String[] {
+            "start game",
+            "quit"
+    });
     
-    WorldState[] worlds;// = new WorldState[4];
+    WorldState[] worlds;
     int world = 0;
     int numWorlds = 0;
 
@@ -39,7 +44,7 @@ public class Game {
 
         loadWorlds("WorldFiles/Worlds.json");
 
-        SM.Push(worlds[0]);
+        SM.Push(mainMenu);
     }
 
     public void Update(double elapsedTime) {
@@ -50,6 +55,9 @@ public class Game {
 
         String act = SM.Update(elapsedTime);
         if(act != null) {
+            if (act.equals("start game")) {
+                SM.Push(worlds[0]);
+            }
             if (act.equals("quit")) {
                 glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
             }

@@ -10,7 +10,7 @@ public class Entity {
     }
 
     public  String lineEntry; //Entity's Line in Entities.txt
-    private String name; //Entity's Name
+    String name; //Entity's Name
     Location location;
     Texture tex;
 
@@ -21,6 +21,7 @@ public class Entity {
      * @param y Y-Coordinate
      */
     public Entity(String ID, int x, int y, Direction dir, boolean mob) {
+        name = ID;
         this.location = new Location(x, y, dir);
         String line;
         File file = new File("Data/Entities.txt");
