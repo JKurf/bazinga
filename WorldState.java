@@ -73,7 +73,7 @@ public class WorldState implements IState{
             Camera.y = player.location.yPos();
         }
 
-        for(int n = 0; n < 4; n ++) {
+        for(int n = 0; n < world.nMobs; n ++) {
             if (Math.sqrt(Math.pow(player.location.xPos() - world.mobs[n].location.xPos(),2) + Math.pow(player.location.yPos() - world.mobs[n].location.yPos(),2)) < 1) {
                         action = "battle:" + Integer.toString(n);
             }
@@ -85,7 +85,7 @@ public class WorldState implements IState{
         graphics.drawWorld(world);
         if(drawClip) graphics.drawClip(world);
         graphics.drawEntity(player);
-        for(int n = 0; n < 4; n ++) {
+        for(int n = 0; n < world.nMobs; n ++) {
             graphics.drawEntity(world.mobs[n]);
         }
 
@@ -98,6 +98,19 @@ public class WorldState implements IState{
         //graphics.highlightTile(player);
 
         //graphics.drawText(String.format("ABC DEF"), graphics.Font, 8, 0, 0, 8.0f, 8.0f);
+
+        for(int n = 0; n < world.nMobs; n ++) {
+            if (world.mobs[n].alive == false) {
+                world.mobs[n] = null;
+
+                //remove n from list
+                for(int J = n; J < world.nMobs-1; J++) {
+                    world.mobs[J] = world.mobs[J+1];
+                }
+
+                world.nMobs--;
+            }
+        }
     }
 
     @Override
