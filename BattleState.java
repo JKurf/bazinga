@@ -27,21 +27,22 @@ public class BattleState implements IState {
 
     @Override
     public void Update(double elapsedTime) {
-        if(InputClass.keyPress(GLFW_KEY_SPACE)) {
-                e.damage(15);
+        if(InputClass.keyPress(GLFW_KEY_F)) {
+                e.damage(120);
                 System.out.println("Enemy Health: " + e.getHealth());
 
                 if(e.getHealth() <= 0) {
-                    e.location.setX(-10);
+                    //e.location.setX(-10);
                     action = "resume";
                     System.out.println("dead");
+                    e.alive = false;
             }
         }
     }
 
     @Override
     public void Render(GraphicsClass graphics) {
-        graphics.drawTextMenu("press space to win!", GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/4, false);
+        graphics.drawTextMenu("press f to pay respects!", GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/4, false);
     }
 
     @Override

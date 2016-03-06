@@ -14,6 +14,7 @@ public class World {
     float xStart = 1.5f;
     float yStart = 1.5f;
     Mob[] mobs;
+    int nMobs = 4;
 
     /**
      * This Constructor only needs the World Name, and will use the method 'getMapData' to load the world

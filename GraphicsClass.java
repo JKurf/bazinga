@@ -266,7 +266,9 @@ public class GraphicsClass {
     }
 
     public void drawEntity(Entity ent) {
-        draw(16, 16, 32, 32, ent.location.xPos(), (ent.location.yPos() + 1), TILE_WIDTH, TILE_HEIGHT, ent.tex);
+        if(ent != null) {
+            draw(16, 16, 32, 32, ent.location.xPos(), (ent.location.yPos() + 1), TILE_WIDTH, TILE_HEIGHT, ent.tex);
+        }
     }
 
     public void drawText(String str, Texture tex, int gridSize, float x, float y,
