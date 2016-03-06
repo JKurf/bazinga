@@ -30,10 +30,6 @@ public class WorldState implements IState{
             player.location.setX(world.xStart);
             player.location.setY(world.yStart);
 
-            //enemy.loadTexture("Data/Char01.png");
-            //enemy.location.setX(5);
-            //enemy.location.setY(5);
-
             world.Init();
 
             initialized = true;

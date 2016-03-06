@@ -1,18 +1,13 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
-public class StateMachine {
-    Map<String, IState> mStates = new HashMap<>();
+public class StateStack {
+    Stack<IState> mStack = new Stack<>();
     IState mCurrentState = new EmptyState();
-    String mCurrentStateID;
 
     public String Update(double elapsedTime)
     {
-        //mStack.peek().Update(elapsedTime);
-        mCurrentState.Update(elapsedTime);
-        //String act = mStack.peek().check();
-        String act = mCurrentState.check();
+        mStack.peek().Update(elapsedTime);
+        String act = mStack.peek().check();
         if (act != null) {
             return act;
         }
@@ -22,16 +17,23 @@ public class StateMachine {
 
     public void Render(GraphicsClass graphics)
     {
+        mStack.peek().Render(graphics);
+    }
 
-        //mStack.peek().Render(graphics);
-        mCurrentState.Render(graphics);
+    public IState Pop() {
+        return mStack.pop();
+    }
+
+    public void Push(IState state) {
+        state.Init();
+        mStack.push(state);
     }
 
     public void Quit() {
         mCurrentState.OnExit();
     }
 
-
+    /*
     public void Change(String stateName)
     {
         //mStack.peek().OnExit();
@@ -65,4 +67,5 @@ public class StateMachine {
 
         System.out.println();
     }
+    */
 }
