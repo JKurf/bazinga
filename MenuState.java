@@ -2,27 +2,40 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class MenuState implements IState {
     private boolean initialized = false;
-    MenuItem root = new MenuItem("root");
-    int activeP = 0;
-    int activeC = 0;
+    String[] A;
+    Menu root = new Menu();
     int MaxChildren = 4;
 
     String action = null;
 
+    public MenuState(String[] a) {
+        A = a;
+        /*for(int n = 0; n < A.length; n ++) {
+            root.Add(A[n]);
+        }*/
+    }
+
     @Override
     public void Init() {
+        root.active = 0;
         if(!initialized) {
             root.Init();
 
+            /*
             MenuItem resume = new MenuItem("resume");
             MenuItem settings = new MenuItem("settings");
             MenuItem memes = new MenuItem("change world");
             MenuItem quit = new MenuItem("quit");
 
-            root.addChild(resume);
-            root.addChild(settings);
-            root.addChild(memes);
-            root.addChild(quit);
+            root.Add("resume");
+            root.Add("settings");
+            root.Add("change world");
+            root.Add("quit");
+            */
+
+            for(int n = 0; n < A.length; n ++) {
+                root.Add(A[n]);
+            }
 
             initialized = true;
         }
@@ -31,38 +44,33 @@ public class MenuState implements IState {
     @Override
     public void Update(double elapsedTime) {
         if(InputClass.keyPress(GLFW_KEY_W)) {
-            activeC--;
+            root.active--;
         }
         if(InputClass.keyPress(GLFW_KEY_S)) {
-            activeC++;
+            root.active++;
         }
 
         if(InputClass.keyPress(GLFW_KEY_D)) {
-            if(root.current.equals("quit")) {
-                action = "quit";
-            }
-            if(root.current.equals("resume")) {
-                action = "resume";
-            }
-            if(root.current.equals("change world")) {
-                action = "change";
-            }
+            action = root.items[root.active].contents;
         }
         else
             action = null;
 
-        if(activeC < 0) activeC = MaxChildren-1;
-        if(activeC > MaxChildren-1) activeC = 0;
-        if(activeP < 0) activeP = MaxChildren-1;
-        if(activeP > MaxChildren-1) activeP = 0;
 
-        root.Update(elapsedTime, activeC);
+        if(root.active < 0) root.active = MaxChildren-1;
+        if(root.active > MaxChildren-1) root.active = 0;
+        //if(activeP < 0) activeP = MaxChildren-1;
+        //if(activeP > MaxChildren-1) activeP = 0;
+
+        //root.Update(elapsedTime, activeC);
+        root.Update(elapsedTime);
     }
 
     @Override
     public void Render(GraphicsClass graphics) {
-        root.Render(graphics, activeC, false);
-        graphics.drawText(String.format("%d:%d", activeP, activeC), graphics.Font, 16, 0, 0, 8.0f, 8.0f);
+        //root.Render(graphics, activeC, false);
+        root.Render(graphics);
+        graphics.drawText(String.format("%d", root.active), graphics.Font, 16, 0, 0, 8.0f, 8.0f);
     }
 
     @Override

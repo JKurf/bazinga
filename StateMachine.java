@@ -1,16 +1,13 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class StateMachine {
-    Map<String, IState> mStates = new HashMap();
+    Stack<IState> mStack = new Stack<IState>();
     IState mCurrentState = new EmptyState();
-    String mCurrentStateID;
 
     public String Update(double elapsedTime)
     {
-
-        mCurrentState.Update(elapsedTime);
-        String act = mCurrentState.check();
+        mStack.peek().Update(elapsedTime);
+        String act = mStack.peek().check();
         if (act != null) {
             return act;
         }
@@ -20,15 +17,29 @@ public class StateMachine {
 
     public void Render(GraphicsClass graphics)
     {
-        mCurrentState.Render(graphics);
+        mStack.peek().Render(graphics);
     }
 
+    public IState Pop() {
+        return mStack.pop();
+    }
+
+    public void Push(IState state) {
+        state.Init();
+        mStack.push(state);
+    }
+
+    public void Quit() {
+        mCurrentState.OnExit();
+    }
+
+    /*
     public void Change(String stateName)
     {
-        mCurrentState.OnExit();
-        mCurrentState = mStates.get(stateName);
-        mCurrentStateID = stateName;
-        mCurrentState.OnEnter(new String[] {""});
+        //mStack.peek().OnExit();
+        //mCurrentState = mStates.get(stateName);
+        //mCurrentStateID = stateName;
+        //mCurrentState.OnEnter(new String[] {""});
     }
 
     public void Change(String stateName, String[] params)
@@ -45,10 +56,6 @@ public class StateMachine {
         mStates.get(name).Init();
     }
 
-    public void Quit() {
-        mCurrentState.OnExit();
-    }
-
     public void List() {
         System.out.println("Current States:");
 
@@ -60,4 +67,5 @@ public class StateMachine {
 
         System.out.println();
     }
+    */
 }
