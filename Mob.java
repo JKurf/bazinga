@@ -4,11 +4,11 @@ import java.util.Scanner;
  * @author Jack Kurfman
  * @version 3/2/2016.
  */
-public class Mob extends Entity {
+public class Mob extends Entity{
 
     int level;
     private int levelCap;
-    int health; //Mob Health
+    //int health; //Mob Health
     Scanner lineScan = new Scanner(this.lineEntry);
     boolean alive = true;
 
