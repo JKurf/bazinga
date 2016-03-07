@@ -4,6 +4,8 @@ public class BattleState implements IState {
     boolean Initialized = false;
     String action = "none";
 
+    BattleStack battleStack;
+
     Menu root;
 
     Mob e;
@@ -20,7 +22,9 @@ public class BattleState implements IState {
         root.Add("attack");
         root.Add("action");
         root.Add("surrender");
-        root.Add("options");
+        root.Add("execute");
+
+        battleStack = new BattleStack();
     }
 
     @Override
@@ -32,6 +36,9 @@ public class BattleState implements IState {
 
     @Override
     public void Update(double elapsedTime) {
+
+        String battleAction = battleStack.Update(elapsedTime);
+
         if(InputClass.keyPress(GLFW_KEY_W)) {
             root.active--;
         }
@@ -50,7 +57,12 @@ public class BattleState implements IState {
 
         if(action != null) {
             if (action.equals("attack")) {
-                e.damage(10);
+                AttackState atk = new AttackState();
+                battleStack.Push(atk, p, e);
+            }
+            if (action.equals("execute")) {
+                while(!battleStack.mStack.empty())
+                    battleStack.Pop();
             }
         }
 
@@ -62,12 +74,8 @@ public class BattleState implements IState {
         }
     }
 
-    private void attack(Entity p1, Entity p2) {
-    }
-
     @Override
     public void Render(GraphicsClass graphics) {
-        //graphics.drawTextMenu("press f to pay respects!", GraphicsClass.WIDTH/2, GraphicsClass.HEIGHT/4, false);
         graphics.drawEntityScreen(p, 0, 0, 4.0f);
         graphics.drawEntityScreen(e, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*graphics.zoom*4.0f, 0, 4.0f);
         graphics.drawText(String.format("%d HP", p.health), 0, 64);
@@ -77,17 +85,17 @@ public class BattleState implements IState {
         graphics.drawText("why", 0, 64+8);
         graphics.drawText(e.name, GraphicsClass.WIDTH - 128 - e.name.length()*GraphicsClass.zoom*8.0f, 0);
 
+        battleStack.Render(graphics);
+
         root.Render(graphics);
     }
 
     @Override
     public void OnEnter(String[] params) {
-
     }
 
     @Override
     public void OnExit() {
-
     }
 
     @Override

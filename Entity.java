@@ -13,10 +13,13 @@ public class Entity {
     String name; //Entity's Name
     Location location;
     Texture tex;
+    int health;
     float u1;
     float u2;
     float v1;
     float v2;
+
+    public void damage(int dmg) {health -= dmg;}
 
     /**
      * This Constructor will Give the Entity a Cartesian Position, an ID Number, and a Name
