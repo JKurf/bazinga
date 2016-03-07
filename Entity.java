@@ -13,6 +13,10 @@ public class Entity {
     String name; //Entity's Name
     Location location;
     Texture tex;
+    float u1;
+    float u2;
+    float v1;
+    float v2;
 
     /**
      * This Constructor will Give the Entity a Cartesian Position, an ID Number, and a Name
@@ -21,7 +25,7 @@ public class Entity {
      * @param y Y-Coordinate
      */
     public Entity(String ID, int x, int y, Direction dir, boolean mob) {
-        name = ID;
+        //name = ID;
         this.location = new Location(x, y, dir);
         String line;
         File file = new File("Data/Entities.txt");
@@ -45,5 +49,17 @@ public class Entity {
 
     public void loadTexture(String filename) {
         tex = GraphicsClass.loadTexture(filename);
+        u1 = 0;
+        u2 = 16;
+        v1 = 0;
+        v2 = 16;
+    }
+
+    public void loadTexture(String filename, float a, float b, float c, float d) {
+        loadTexture(filename);
+        u1 = a;
+        v1 = b;
+        u2 = c;
+        v2 = d;
     }
 }

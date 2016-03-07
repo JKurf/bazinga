@@ -17,6 +17,7 @@ public class Mob extends Entity {
         this.level = level;
         int dummy = lineScan.nextInt();
         String summy = lineScan.next();
+        name = summy;
         this.levelCap = lineScan.nextInt();
         int healthStart = lineScan.nextInt();
         int healthMid = lineScan.nextInt();

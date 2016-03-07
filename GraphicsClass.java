@@ -268,6 +268,42 @@ public class GraphicsClass {
         }
     }
 
+    public void drawEntityScreen(Entity ent, float x, float y, float Z) {
+        if(ent != null) {
+            float u1 = ent.u1 / getPow2(ent.tex.getImageWidth());
+            float v1 = ent.v1 / getPow2(ent.tex.getImageHeight());
+            float u2 = ent.u2 / getPow2(ent.tex.getImageWidth());
+            float v2 = ent.v2 / getPow2(ent.tex.getImageHeight());
+
+            // store the current model matrix
+            glPushMatrix();
+
+            // bind to the appropriate texture for this sprite
+            ent.tex.bind();
+
+            // translate to the right location and prepare to draw
+            glTranslatef(x, y, 0);
+            glColor3f(1,1,1);
+
+            // draw a quad textured to match the sprite
+            glBegin(GL11.GL_QUADS);
+            {
+                glTexCoord2f(u1, v1);       //uv
+                glVertex2f(0, 0);               //xy
+                glTexCoord2f(u1, v2);       //uv
+                glVertex2f(0, 16*zoom*Z);              //xy
+                glTexCoord2f(u2, v2);       //uv
+                glVertex2f(16*zoom*Z, 16*zoom*Z);             //xy
+                glTexCoord2f(u2, v1);       //uv
+                glVertex2f(16*zoom*Z,0);               //xy
+            }
+            GL11.glEnd();
+
+            // restore the model view matrix to prevent contamination
+            GL11.glPopMatrix();
+        }
+    }
+
     public void drawText(String str, Texture tex, int gridSize, float x, float y,
                          float W, float H){
         float w = W * 2.0f;
