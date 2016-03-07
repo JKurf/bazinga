@@ -82,9 +82,10 @@ public class Game {
             }
             if(act.startsWith("battle:")) {
                 String ent = act.substring(7);
-                System.out.println("Battle Started with Entity " + ent);
+                Mob m = worlds[world].world.mobs[Integer.valueOf(ent)];
+                System.out.println("Battle Started with " + m.name + " " + ent);
 
-                BattleState battle = new BattleState(worlds[world].player,worlds[world].world.mobs[Integer.valueOf(ent)]);
+                BattleState battle = new BattleState(worlds[world].player,m);
 
                 SM.Push(battle);
             }
@@ -96,9 +97,9 @@ public class Game {
 
         SM.Render(graphics);
 
-        String FPS = String.format("fps:%.1f", GameClient.fps);
-        graphics.drawText(FPS, graphics.Font, 16, GraphicsClass.WIDTH/2, 0, 8.0f, 8.0f);
-        graphics.drawText(String.format("%d", world), graphics.Font, 16, GraphicsClass.WIDTH/2, 8, 8.0f, 8.0f);
+        //String FPS = String.format("fps:%.1f", GameClient.fps);
+        //graphics.drawText(FPS, graphics.Font, 16, GraphicsClass.WIDTH/2, 0, 8.0f, 8.0f);
+        //graphics.drawText(String.format("%d", world), graphics.Font, 16, GraphicsClass.WIDTH/2, 8, 8.0f, 8.0f);
 
         graphics.updateScreen();
     }

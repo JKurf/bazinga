@@ -25,12 +25,19 @@ public class WorldState implements IState{
     @Override
     public void Init() {
         if(!initialized) {
-            player.loadTexture("Data/TestImg.png");
+            player.loadTexture("Data/TestImg.png", 16, 16, 32, 32);
 
             player.location.setX(world.xStart);
             player.location.setY(world.yStart);
 
             world.Init();
+
+            for(int n = 0; n < world.nMobs; n ++) {
+                world.mobs[n].u1 = 0;
+                world.mobs[n].v1 = 0;
+                world.mobs[n].u2 = 16;
+                world.mobs[n].v2 = 16;
+            }
 
             initialized = true;
         }

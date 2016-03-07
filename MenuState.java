@@ -57,8 +57,8 @@ public class MenuState implements IState {
             action = null;
 
 
-        if(root.active < 0) root.active = MaxChildren-1;
-        if(root.active > MaxChildren-1) root.active = 0;
+        if(root.active < 0) root.active = root.n-1;
+        if(root.active > root.n-1) root.active = 0;
         //if(activeP < 0) activeP = MaxChildren-1;
         //if(activeP > MaxChildren-1) activeP = 0;
 

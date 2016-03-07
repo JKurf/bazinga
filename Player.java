@@ -1,5 +1,5 @@
 public class Player extends Entity {
-    private String name; //Player's Name
+    //private String name; //Player's Name
     private String spec; //Player's Class
     private int level; //Player's Level
     int health; //Player's Health Points
