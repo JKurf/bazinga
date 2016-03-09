@@ -55,10 +55,14 @@ public class Location {
     }
 
     public boolean canMove(float dx, float dy, World world) {
-        if(world.clip[-1 + world.rows - (int)((y + dy + 1.0f/16.0f))][(int)((x + dx + 1.0f/16.0f))])   {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 15.0f/16.0f))][(int)((x + dx + 1.0f/16.0f))])   {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 15.0f/16.0f))][(int)((x + dx + 15.0f/16.0f))])  {return false;}
-        if(world.clip[-1 + world.rows - (int)((y + dy + 1.0f/16.0f))][(int)((x + dx + 15.0f/16.0f))])  {return false;}
+        float d = 2.0f;
+        float small = d/16.0f;
+        float large = (16.0f-d)/16.0f;
+
+        if(world.clip[-1 + world.rows - (int)((y + dy + small))][(int)((x + dx + small))])   {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + large))][(int)((x + dx + small))])   {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + large))][(int)((x + dx + large))])  {return false;}
+        if(world.clip[-1 + world.rows - (int)((y + dy + small))][(int)((x + dx + large))])  {return false;}
         return true;
     }
 

@@ -16,6 +16,9 @@ public class BattleState implements IState {
         e = E;
         p = P;
 
+        p.currentAnimation = Animation.RIGHT;
+        e.currentAnimation = Animation.LEFT;
+
         root = new Menu();
 
         root.setType(1);
@@ -38,6 +41,9 @@ public class BattleState implements IState {
     public void Update(double elapsedTime) {
 
         String battleAction = battleStack.Update(elapsedTime);
+
+        e.Animations[e.currentAnimation].Update(elapsedTime);
+        p.Animations[p.currentAnimation].Update(elapsedTime);
 
         if(InputClass.keyPress(GLFW_KEY_W)) {
             root.active--;
@@ -77,7 +83,7 @@ public class BattleState implements IState {
     @Override
     public void Render(GraphicsClass graphics) {
         graphics.drawEntityScreen(p, 0, 0, 4.0f);
-        graphics.drawEntityScreen(e, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*graphics.zoom*4.0f, 0, 4.0f);
+        graphics.drawEntityScreen(e, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*GraphicsClass.zoom*4.0f, 0, 4.0f);
         graphics.drawText(String.format("%d HP", p.health), 0, 64);
         graphics.drawText(String.format("%d HP", e.health), GraphicsClass.WIDTH - 128, 64);
 

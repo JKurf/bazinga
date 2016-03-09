@@ -47,3 +47,10 @@ Added MenuItem class
 -MenuItem has an array of MenuItem children to also dipslay  
 -Rendered recursively, highlighting the current one  
 Implemented system to pass messages up to the game class from deeper classes  
+
+***8 March 2016***
+Added Animations  
+Created function to load .json file holding all animation data for a single entity  
+Added BattleState  
+Implemented simple BattleStack that allows both the player and enemy to attack  
+TODO: Decide how stats affect damage  

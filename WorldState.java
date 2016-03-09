@@ -25,18 +25,18 @@ public class WorldState implements IState{
     @Override
     public void Init() {
         if(!initialized) {
-            player.loadTexture("Data/TestImg.png", 16, 16, 32, 32);
+            //player.loadTexture("Data/TestImg.png", 16, 16, 32, 32);
+            player.loadAnimationData("Data/player.json");
 
             player.location.setX(world.xStart);
             player.location.setY(world.yStart);
 
+            player.currentAnimation = 4;
+
             world.Init();
 
-            for(int n = 0; n < world.nMobs; n ++) {
-                world.mobs[n].u1 = 0;
-                world.mobs[n].v1 = 0;
-                world.mobs[n].u2 = 16;
-                world.mobs[n].v2 = 16;
+            for(int i = 0; i < 4; i ++) {
+                world.mobs[i].loadAnimationData("Data/Skeleton.json");
             }
 
             initialized = true;
@@ -47,17 +47,22 @@ public class WorldState implements IState{
     public void Update(double elapsedTime) {
         float speed = 5.0f;
 
+        player.currentAnimation = Animation.IDLE;
         if(InputClass.isKeyDown(GLFW_KEY_D)) {
             player.location.move((float)(speed * elapsedTime), 0, world);
+            player.currentAnimation = Animation.RIGHT;
         }
         if(InputClass.isKeyDown(GLFW_KEY_A)) {
             player.location.move((float)(-speed * elapsedTime), 0, world);
+            player.currentAnimation = Animation.LEFT;
         }
         if(InputClass.isKeyDown(GLFW_KEY_W)) {
             player.location.move(0, (float)(speed * elapsedTime), world);
+            player.currentAnimation = Animation.UP;
         }
         if(InputClass.isKeyDown(GLFW_KEY_S)) {
             player.location.move(0, (float)(-speed * elapsedTime), world);
+            player.currentAnimation = Animation.DOWN;
         }
 
         if(InputClass.keyPress(GLFW_KEY_SPACE)) {
@@ -76,7 +81,10 @@ public class WorldState implements IState{
             Camera.y = player.location.yPos();
         }
 
+        player.Animations[player.currentAnimation].Update(elapsedTime);
+
         for(int n = 0; n < world.nMobs; n ++) {
+            world.mobs[n].Animations[world.mobs[n].currentAnimation].Update(elapsedTime);
             if (Math.sqrt(Math.pow(player.location.xPos() - world.mobs[n].location.xPos(),2) + Math.pow(player.location.yPos() - world.mobs[n].location.yPos(),2)) < 1) {
                         action = "battle:" + Integer.toString(n);
             }

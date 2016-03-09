@@ -1,6 +1,12 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Entity {
@@ -14,10 +20,11 @@ public class Entity {
     Location location;
     Texture tex;
     int health;
-    float u1;
-    float u2;
-    float v1;
-    float v2;
+
+    //Animation main;
+    Animation[] Animations;
+    int currentAnimation = 0;
+    String[] AnimationsNames;
 
     public void damage(int dmg) {health -= dmg;}
 
@@ -52,17 +59,45 @@ public class Entity {
 
     public void loadTexture(String filename) {
         tex = GraphicsClass.loadTexture(filename);
-        u1 = 0;
-        u2 = 16;
-        v1 = 0;
-        v2 = 16;
     }
 
-    public void loadTexture(String filename, float a, float b, float c, float d) {
-        loadTexture(filename);
-        u1 = a;
-        v1 = b;
-        u2 = c;
-        v2 = d;
+    public void loadAnimationData(String filename) {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(filename));
+            JSONObject json = (JSONObject) obj;
+            loadTexture((String) json.get("SpriteSheet"));
+
+            JSONArray animations = (JSONArray) json.get("Animations");
+            AnimationsNames = new String[animations.size()];
+            Animations = new Animation[animations.size()];
+
+            int count = 0;
+            for(Object i : animations) {
+                AnimationsNames[count++] = (String) i;
+            }
+            int numAnim = count;
+
+            int whichAnimation = 0;
+            int whichFrame;
+            for(int n = 0; n < numAnim; n ++) {
+                JSONArray anim = (JSONArray) json.get(AnimationsNames[n]);
+
+                Animations[whichAnimation] = new Animation(anim.size());
+                whichFrame = 0;
+                for (Object i : anim) {
+                    int[] data = new int[4];
+                    int iii = 0;
+                    for (Object j : (List) i) {
+                        data[iii++] = Integer.valueOf((String) j);
+                    }
+
+                    Animations[whichAnimation].frames[whichFrame++] = new Frame(data[0], data[1], data[2], data[3]);
+                }
+                whichAnimation++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -125,9 +125,11 @@ public class Game {
                 for (Object j : (List) i) {
                     S = j.toString();
                 }
-                worlds[count] = new WorldState(S);
-                worlds[count].Init();
-                count++;
+                if(count < numWorlds) {
+                    worlds[count] = new WorldState(S);
+                    worlds[count].Init();
+                    count++;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
