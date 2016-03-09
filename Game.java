@@ -52,6 +52,9 @@ public class Game {
         if(InputClass.isKeyDown(GLFW_KEY_Q) || InputClass.isKeyDown(GLFW_KEY_ESCAPE)) {
             glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
         }
+        if(InputClass.keyPress(GLFW_KEY_G)) {
+            Audio.play(Audio.GIRUGAMESH);
+        }
 
         String act = SM.Update(elapsedTime);
         if(act != null) {
