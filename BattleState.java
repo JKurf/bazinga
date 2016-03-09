@@ -90,6 +90,7 @@ public class BattleState implements IState {
             action = "resume";
             System.out.println(E2.name + " was killed by " + E1.name);
             E2.alive = false;
+            Audio.end();
             //E1.gainExp(E2.level / 20);
         }
     }

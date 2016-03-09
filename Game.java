@@ -105,6 +105,7 @@ public class Game {
     }
 
     public void Quit() {
+        Audio.end();
         SM.Quit();
         graphics.Quit();
         System.out.printf("\nQuitso");
