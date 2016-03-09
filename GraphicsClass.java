@@ -81,7 +81,7 @@ public class GraphicsClass {
 
         GL.createCapabilities();
 
-        glClearColor(130.0f/255.0f, 105.0f / 255.0f, 83.0f / 255.0f, 0.0f);
+        glClearColor(130.0f/255.0f, 105.0f / 255.0f, 183.0f / 255.0f, 0.0f);
 
         glEnable(GL11.GL_TEXTURE_2D);
 
@@ -129,6 +129,9 @@ public class GraphicsClass {
         // store the current model matrix
         glPushMatrix();
 
+        glEnable(GL_ALPHA_TEST);
+        glAlphaFunc(GL_NOTEQUAL, 0);
+
         // bind to the appropriate texture for this sprite
         tex.bind();
 
@@ -149,6 +152,8 @@ public class GraphicsClass {
             glVertex2f(w*zoom,0);               //xy
         }
         GL11.glEnd();
+
+        glDisable(GL_ALPHA_TEST);
 
         // restore the model view matrix to prevent contamination
         GL11.glPopMatrix();
@@ -264,19 +269,25 @@ public class GraphicsClass {
 
     public void drawEntity(Entity ent) {
         if(ent != null) {
-            draw(16, 16, 32, 32, ent.location.xPos(), (ent.location.yPos() + 1), TILE_WIDTH, TILE_HEIGHT, ent.tex);
+            //Frame f = ent.Animations[ent.currentAnimation].getCurrent();
+            Frame f = ent.Animations[ent.currentAnimation].getCurrent();
+            draw(f.u1, f.v1, f.u2, f.v2, ent.location.xPos(), (ent.location.yPos() + 1), TILE_WIDTH, TILE_HEIGHT, ent.tex);
         }
     }
 
     public void drawEntityScreen(Entity ent, float x, float y, float Z) {
         if(ent != null) {
-            float u1 = ent.u1 / getPow2(ent.tex.getImageWidth());
-            float v1 = ent.v1 / getPow2(ent.tex.getImageHeight());
-            float u2 = ent.u2 / getPow2(ent.tex.getImageWidth());
-            float v2 = ent.v2 / getPow2(ent.tex.getImageHeight());
+            Frame f = ent.Animations[ent.currentAnimation].getCurrent();
+            float u1 = (float) f.u1 / getPow2(ent.tex.getImageWidth());
+            float v1 = (float) f.v1 / getPow2(ent.tex.getImageHeight());
+            float u2 = (float) f.u2 / getPow2(ent.tex.getImageWidth());
+            float v2 = (float) f.v2 / getPow2(ent.tex.getImageHeight());
 
             // store the current model matrix
             glPushMatrix();
+
+            glEnable(GL_ALPHA_TEST);
+            glAlphaFunc(GL_NOTEQUAL, 0);
 
             // bind to the appropriate texture for this sprite
             ent.tex.bind();
@@ -298,6 +309,8 @@ public class GraphicsClass {
                 glVertex2f(16*zoom*Z,0);               //xy
             }
             GL11.glEnd();
+
+            glDisable(GL_ALPHA_TEST);
 
             // restore the model view matrix to prevent contamination
             GL11.glPopMatrix();
@@ -533,7 +546,7 @@ public class GraphicsClass {
         keyCallback.release();
     }
 
-    private int getPow2(int n) {
+    public static int getPow2(int n) {
         int ret = 2;
         while (ret < n) {
             ret *= 2;
