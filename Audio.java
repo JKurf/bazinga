@@ -11,6 +11,7 @@ import java.io.InputStream;
 public class Audio {
 
     public static final String KAZOO = "Data/Xenoblade_Kazoo.wav";
+    public static final String GIRUGAMESH = "Data/Girugamesh.wav";
     private static InputStream inputWAV;
     private static AudioStream playWAV;
 
