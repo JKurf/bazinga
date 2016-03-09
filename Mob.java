@@ -10,7 +10,6 @@ public class Mob extends Entity{
     private int levelCap;
     //int health; //Mob Health
     Scanner lineScan = new Scanner(this.lineEntry);
-    boolean alive = true;
 
     public Mob(String ID, int level, int x, int y, Direction dir) {
         super(ID, x, y, dir, true);

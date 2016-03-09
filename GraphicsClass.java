@@ -286,7 +286,7 @@ public class GraphicsClass {
             // store the current model matrix
             glPushMatrix();
 
-            glEnable(GL_ALPHA_TEST);
+            //glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_NOTEQUAL, 0);
 
             // bind to the appropriate texture for this sprite

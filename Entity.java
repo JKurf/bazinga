@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Entity {
+    boolean alive = true;
 
     public static void main(String[] args) {
         Entity test = new Entity("0000", 0, 0, Direction.DOWN, false);

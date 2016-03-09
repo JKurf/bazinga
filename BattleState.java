@@ -6,18 +6,20 @@ public class BattleState implements IState {
 
     BattleStack battleStack;
 
+    boolean who = true;
+
     Menu root;
 
-    Mob e;
-    Player p;
+    Entity E1,E2;
 
     public BattleState(Player P, Mob E) {
         System.out.println("Battle Begun");
-        e = E;
-        p = P;
 
-        p.currentAnimation = Animation.RIGHT;
-        e.currentAnimation = Animation.LEFT;
+        E1 = P;
+        E2 = E;
+
+        E1.currentAnimation = Animation.RIGHT;
+        E2.currentAnimation = Animation.LEFT;
 
         root = new Menu();
 
@@ -42,8 +44,8 @@ public class BattleState implements IState {
 
         String battleAction = battleStack.Update(elapsedTime);
 
-        e.Animations[e.currentAnimation].Update(elapsedTime);
-        p.Animations[p.currentAnimation].Update(elapsedTime);
+        E2.Animations[E2.currentAnimation].Update(elapsedTime);
+        E1.Animations[E1.currentAnimation].Update(elapsedTime);
 
         if(InputClass.keyPress(GLFW_KEY_W)) {
             root.active--;
@@ -64,7 +66,16 @@ public class BattleState implements IState {
         if(action != null) {
             if (action.equals("attack")) {
                 AttackState atk = new AttackState();
-                battleStack.Push(atk, p, e);
+                if(who) {
+                    battleStack.Push(atk, E1, E2);
+                    battleStack.Pop();
+                    //who = !who;
+                }
+                else {
+                    battleStack.Push(atk, E2, E1);
+                    battleStack.Pop();
+                    //who = !who;
+                }
             }
             if (action.equals("execute")) {
                 while(!battleStack.mStack.empty())
@@ -72,24 +83,25 @@ public class BattleState implements IState {
             }
         }
 
-        if(e.getHealth() <= 0) {
+        if(E2.health <= 0) {
             action = "resume";
-            System.out.println("dead");
-            e.alive = false;
-            p.gainExp(e.level / 20);
+            System.out.println(E2.name + " was killed by " + E1.name);
+            E2.alive = false;
+            //E1.gainExp(E2.level / 20);
         }
     }
 
     @Override
     public void Render(GraphicsClass graphics) {
-        graphics.drawEntityScreen(p, 0, 0, 4.0f);
-        graphics.drawEntityScreen(e, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*GraphicsClass.zoom*4.0f, 0, 4.0f);
-        graphics.drawText(String.format("%d HP", p.health), 0, 64);
-        graphics.drawText(String.format("%d HP", e.health), GraphicsClass.WIDTH - 128, 64);
+        float Z = 4.0f;
+        graphics.drawEntityScreen(E1, 0, 0, Z);
+        graphics.drawEntityScreen(E2, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*GraphicsClass.zoom*Z, 0, Z);
 
-        graphics.drawText(p.name, 128, 0);
-        graphics.drawText("why", 0, 64+8);
-        graphics.drawText(e.name, GraphicsClass.WIDTH - 128 - e.name.length()*GraphicsClass.zoom*8.0f, 0);
+        graphics.drawText(String.format("%d HP", E1.health), 0, GraphicsClass.TILE_HEIGHT*GraphicsClass.zoom*Z/2.0f);
+        graphics.drawText(String.format("%d HP", E2.health), GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*GraphicsClass.zoom*Z, GraphicsClass.TILE_HEIGHT*GraphicsClass.zoom*Z/2.0f);
+
+        graphics.drawText(E1.name, GraphicsClass.TILE_WIDTH*Z*GraphicsClass.zoom, 0);
+        graphics.drawText(E2.name, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*Z*GraphicsClass.zoom - E2.name.length() * 16.0f, 0);
 
         battleStack.Render(graphics);
 

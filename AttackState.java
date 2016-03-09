@@ -2,7 +2,6 @@
  * Created by graf on 3/7/2016.
  */
 public class AttackState implements IBattleState{
-    boolean executed = false;
     Entity a;
     Entity b;
 
@@ -15,8 +14,9 @@ public class AttackState implements IBattleState{
 
     @Override
     public void Execute() {
-        b.damage(10);
-        System.out.println(a.name + " attacks " + b.name + " for " + 10 + " damage.");
+        int dmg = 25;
+        b.damage(dmg);
+        System.out.println(a.name + " attacks " + b.name + " for " + dmg + " damage.");
     }
 
     @Override
