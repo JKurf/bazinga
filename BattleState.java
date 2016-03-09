@@ -37,10 +37,13 @@ public class BattleState implements IState {
         if(!Initialized) {
             Initialized = true;
         }
+        Audio.play(Audio.KAZOO);
     }
 
     @Override
     public void Update(double elapsedTime) {
+
+        if (Audio.isOver()) Audio.play(Audio.KAZOO);
 
         String battleAction = battleStack.Update(elapsedTime);
 
@@ -114,6 +117,7 @@ public class BattleState implements IState {
 
     @Override
     public void OnExit() {
+        Audio.end();
     }
 
     @Override
