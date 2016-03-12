@@ -6,17 +6,14 @@ import java.util.Scanner;
  */
 public class Mob extends Entity{
 
-    int level;
-    private int levelCap;
-    //int health; //Mob Health
+    int levelCap;
     Scanner lineScan = new Scanner(this.lineEntry);
 
     public Mob(String ID, int level, int x, int y, Direction dir) {
         super(ID, x, y, dir, true);
         this.level = level;
         int dummy = lineScan.nextInt();
-        String summy = lineScan.next();
-        name = summy;
+        name = lineScan.next();
         this.levelCap = lineScan.nextInt();
         int healthStart = lineScan.nextInt();
         int healthMid = lineScan.nextInt();
@@ -35,8 +32,5 @@ public class Mob extends Entity{
         return (int) (a * level * Math.pow(1.0 + b, level)) + start;
     }
 
-    public int getLevel() {return level;}
-
-    public int getHealth() {return health;}
-    public void damage(int dmg) {health -= dmg;}
+    //public void damage(int dmg) {health -= dmg;}
 }

@@ -14,9 +14,11 @@ public class AttackState implements IBattleState{
 
     @Override
     public void Execute() {
-        int dmg = 25;
+        int dmg = a.getDamage();
         b.damage(dmg);
         System.out.println(a.name + " attacks " + b.name + " for " + dmg + " damage.");
+        double dmgT = Math.ceil(((float)dmg / (float)b.defense));
+        System.out.println("Base Damage: " + dmg + "   Damage Taken: " + (dmgT));
     }
 
     @Override
