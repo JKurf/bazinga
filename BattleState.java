@@ -29,9 +29,7 @@ public class BattleState implements IState {
 
         root.setType(1);
         root.Add("attack");
-        root.Add("action");
-        root.Add("surrender");
-        root.Add("execute");
+        root.Add("info");
 
         battleStack = new BattleStack();
     }
@@ -40,6 +38,7 @@ public class BattleState implements IState {
     public void Init() {
         if(!Initialized) {
             Initialized = true;
+            battleStack.Pop();
         }
         //Audio.play(Audio.KAZOO);
     }
@@ -63,26 +62,20 @@ public class BattleState implements IState {
             System.out.println('\n' + E[0].name + "'s turn");
         }
         else {
-            if(InputClass.keyPress(GLFW_KEY_SPACE)) {
+            if (InputClass.keyPress(GLFW_KEY_SPACE)) {
                 E[0].levelUp();
-            }
-            else if (InputClass.keyPress(GLFW_KEY_W)) {
+            } else if (InputClass.keyPress(GLFW_KEY_W)) {
                 root.active--;
             } else if (InputClass.keyPress(GLFW_KEY_S)) {
                 root.active++;
             } else if (InputClass.keyPress(GLFW_KEY_D)) {
                 action = root.items[root.active].contents;
-            } else if (InputClass.keyPress(GLFW_KEY_I)) {
-                if (battleStack.mStack.isEmpty()) {
-                    BattleStatState info = new BattleStatState();
-                    battleStack.Push(info, E[0], E[1]);
-                }
             }
         }
 
 
-        if(root.active < 0) root.active = 3;
-        if(root.active > 3) root.active = 0;
+        if(root.active < 0) root.active = root.n-1;
+        if(root.active > root.n-1) root.active = 0;
 
         if(action != null) {
             if (action.equals("attack")) {
@@ -95,6 +88,12 @@ public class BattleState implements IState {
             if (action.equals("execute")) {
                 while(!battleStack.mStack.empty())
                     battleStack.Pop();
+            }
+            if (action.equals("info")) {
+                if (battleStack.mStack.isEmpty()) {
+                    BattleStatState info = new BattleStatState();
+                    battleStack.Push(info, E[0], E[1]);
+                }
             }
         }
 
