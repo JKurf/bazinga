@@ -32,11 +32,21 @@ public class BattleStatState implements IBattleState {
 
     @Override
     public void Render(GraphicsClass graphics, int n) {
-        int x = 0;
-        int y = 0;
-        graphics.drawText(String.format("%d", y), x, y+=8);
-        graphics.drawText(String.format("%d", y), x, y+=8);
-        graphics.drawText(String.format("%d", y), x, y+=8);
+        int x = GraphicsClass.WIDTH/2 - 128;
+        int y = GraphicsClass.HEIGHT/4;
+
+        graphics.drawText(String.format("%s", a.name), x, y);
+        graphics.drawText(String.format("Level: %d", a.level), x, y+=8);
+        graphics.drawText(String.format("EXP:   %d", a.exp), x, y+=8);
+        graphics.drawText(String.format("ATK:   %d", a.attack), x, y+=8);
+
+        x = GraphicsClass.WIDTH/2 + 128;
+        y = GraphicsClass.HEIGHT/4;
+
+        graphics.drawText(String.format("%s", b.name), x, y);
+        graphics.drawText(String.format("Level: %d", b.level), x, y+=8);
+        graphics.drawText(String.format("EXP:   %d", b.exp), x, y+=8);
+        graphics.drawText(String.format("DEF:   %d", b.defense), x, y+=8);
     }
 
     @Override

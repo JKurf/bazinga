@@ -1,5 +1,5 @@
 {
-  "SpriteSheet":"Data/Char01.png",
+  "SpriteSheet":"Data/Char02.png",
   "Animations":[
     "Idle",
     "WalkUp",

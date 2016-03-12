@@ -2,12 +2,12 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class InputClass {
     public static boolean[] keys = new boolean[1024];
-    public static boolean[] keysOld = new boolean[1024];
+    //public static boolean[] keysOld = new boolean[1024];
     public static int[] cooldown = new int[1024];
     public static int cooldownMax = 15;
 
     public static void poll(long window, int key, int scanconde, int action, int mods) {
-        InputClass.keysOld[key] = InputClass.keys[key];
+        //InputClass.keysOld[key] = InputClass.keys[key];
 
         InputClass.keys[key] = (action != GLFW_RELEASE);
     }
