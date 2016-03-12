@@ -19,7 +19,7 @@ public class WorldState implements IState{
         worldWidth = world.cols * GraphicsClass.TILE_WIDTH;
         worldHeight = world.rows * GraphicsClass.TILE_HEIGHT;
 
-        player = new Player("Dave", "0");
+        player = new Player("Dave", "0001");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class WorldState implements IState{
     @Override
     public void Update(double elapsedTime) {
         for(int n = 0; n < world.nMobs; n ++) {
-            if (world.mobs[n].alive == false) {
+            if (!world.mobs[n].alive) {
                 world.mobs[n] = null;
 
                 //remove n from list
@@ -79,7 +79,7 @@ public class WorldState implements IState{
         }
 
         if(InputClass.keyPress(GLFW_KEY_SPACE)) {
-            track = !track;
+            player.levelUp();
         }
         if(InputClass.keyPress(GLFW_KEY_R))
             drawClip = !drawClip;

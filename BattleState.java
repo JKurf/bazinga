@@ -6,20 +6,24 @@ public class BattleState implements IState {
 
     BattleStack battleStack;
 
-    boolean who = true;
-
     Menu root;
 
-    Entity E1,E2;
+    //Entity E1,E2;
+    Entity[] E;
+    boolean current = false;
 
-    public BattleState(Player P, Mob E) {
+    public BattleState(Player p, Mob e) {
         System.out.println("Battle Begun");
 
-        E1 = P;
-        E2 = E;
+        //E1 = p;
+        //E2 = e;
 
-        E1.currentAnimation = Animation.RIGHT;
-        E2.currentAnimation = Animation.LEFT;
+        E = new Entity[2];
+        E[0] = p;
+        E[1] = e;
+
+        E[0].currentAnimation = Animation.RIGHT;
+        E[1].currentAnimation = Animation.LEFT;
 
         root = new Menu();
 
@@ -37,30 +41,44 @@ public class BattleState implements IState {
         if(!Initialized) {
             Initialized = true;
         }
-        Audio.play(Audio.KAZOO);
+        //Audio.play(Audio.KAZOO);
     }
 
     @Override
     public void Update(double elapsedTime) {
-
-        if (Audio.isOver()) Audio.play(Audio.KAZOO);
-
-        String battleAction = battleStack.Update(elapsedTime);
-
-        E2.Animations[E2.currentAnimation].Update(elapsedTime);
-        E1.Animations[E1.currentAnimation].Update(elapsedTime);
-
-        if(InputClass.keyPress(GLFW_KEY_W)) {
-            root.active--;
+                String battleAction = battleStack.Update(elapsedTime);
+        if(battleAction != null) {
+            if(battleAction.equals("back")) {
+                battleStack.Pop();
+            }
         }
-        else if(InputClass.keyPress(GLFW_KEY_S)) {
-            root.active++;
+
+        E[0].Animations[E[0].currentAnimation].Update(elapsedTime);
+        E[1].Animations[E[1].currentAnimation].Update(elapsedTime);
+        action = null;
+
+        if(current) {
+            System.out.println('\n' + E[1].name + "'s turn");
+            current = !current;
+            System.out.println('\n' + E[0].name + "'s turn");
         }
-        else if(InputClass.keyPress(GLFW_KEY_D)) {
-            action = root.items[root.active].contents;
+        else {
+            if(InputClass.keyPress(GLFW_KEY_SPACE)) {
+                E[0].levelUp();
+            }
+            else if (InputClass.keyPress(GLFW_KEY_W)) {
+                root.active--;
+            } else if (InputClass.keyPress(GLFW_KEY_S)) {
+                root.active++;
+            } else if (InputClass.keyPress(GLFW_KEY_D)) {
+                action = root.items[root.active].contents;
+            } else if (InputClass.keyPress(GLFW_KEY_I)) {
+                if (battleStack.mStack.isEmpty()) {
+                    BattleStatState info = new BattleStatState();
+                    battleStack.Push(info, E[0], E[1]);
+                }
+            }
         }
-        else
-            action = null;
 
 
         if(root.active < 0) root.active = 3;
@@ -69,16 +87,10 @@ public class BattleState implements IState {
         if(action != null) {
             if (action.equals("attack")) {
                 AttackState atk = new AttackState();
-                if(who) {
-                    battleStack.Push(atk, E1, E2);
-                    battleStack.Pop();
-                    //who = !who;
-                }
-                else {
-                    battleStack.Push(atk, E2, E1);
-                    battleStack.Pop();
-                    //who = !who;
-                }
+                //battleStack.Push(atk, E[(current) ? 1 : 0], E[(current) ? 0 : 1]);
+                battleStack.Push(atk, E[0], E[1]);
+                battleStack.Pop();
+                current = !current;
             }
             if (action.equals("execute")) {
                 while(!battleStack.mStack.empty())
@@ -86,11 +98,12 @@ public class BattleState implements IState {
             }
         }
 
-        if(E2.health <= 0) {
+        if(E[1].health <= 0) {
             action = "resume";
-            System.out.println(E2.name + " was killed by " + E1.name);
-            E2.alive = false;
-            Audio.end();
+            System.out.println(E[1].name + " was killed by " + E[0].name);
+            E[1].alive = false;
+            E[0].gainExp(E[1]);
+            //Audio.end();
             //E1.gainExp(E2.level / 20);
         }
     }
@@ -98,14 +111,17 @@ public class BattleState implements IState {
     @Override
     public void Render(GraphicsClass graphics) {
         float Z = 4.0f;
-        graphics.drawEntityScreen(E1, 0, 0, Z);
-        graphics.drawEntityScreen(E2, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*GraphicsClass.zoom*Z, 0, Z);
+        graphics.drawEntityScreen(E[0], 0, 0, Z);
+        graphics.drawEntityScreen(E[1], GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*GraphicsClass.zoom*Z, 0, Z);
 
-        graphics.drawText(String.format("%d HP", E1.health), 0, GraphicsClass.TILE_HEIGHT*GraphicsClass.zoom*Z/2.0f);
-        graphics.drawText(String.format("%d HP", E2.health), GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*GraphicsClass.zoom*Z, GraphicsClass.TILE_HEIGHT*GraphicsClass.zoom*Z/2.0f);
+        graphics.drawText(String.format("%d HP", E[0].health), 0, GraphicsClass.TILE_HEIGHT*GraphicsClass.zoom*Z/2.0f);
+        graphics.drawText(String.format("%d HP", E[1].health), GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*GraphicsClass.zoom*Z, GraphicsClass.TILE_HEIGHT*GraphicsClass.zoom*Z/2.0f);
 
-        graphics.drawText(E1.name, GraphicsClass.TILE_WIDTH*Z*GraphicsClass.zoom, 0);
-        graphics.drawText(E2.name, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*Z*GraphicsClass.zoom - E2.name.length() * 16.0f, 0);
+        graphics.drawText(E[0].name, GraphicsClass.TILE_WIDTH*Z*GraphicsClass.zoom, 0);
+        graphics.drawText(E[1].name, GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*Z*GraphicsClass.zoom - E[1].name.length() * 16.0f, 0);
+
+        graphics.drawText(String.format("Lvl: %d", E[0].level), GraphicsClass.TILE_WIDTH*Z*GraphicsClass.zoom, 8.0f);
+        graphics.drawText(String.format("Lvl: %d", E[1].level), GraphicsClass.WIDTH - GraphicsClass.TILE_WIDTH*Z*GraphicsClass.zoom - E[1].name.length() * 16.0f, 8.0f);
 
         battleStack.Render(graphics);
 
@@ -118,7 +134,7 @@ public class BattleState implements IState {
 
     @Override
     public void OnExit() {
-        Audio.end();
+        //Audio.end();
     }
 
     @Override

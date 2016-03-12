@@ -11,23 +11,41 @@ import java.util.Scanner;
 
 public class Entity {
     boolean alive = true;
-
-    public static void main(String[] args) {
-        Entity test = new Entity("0000", 0, 0, Direction.DOWN, false);
-    }
-
     public  String lineEntry; //Entity's Line in Entities.txt
-    String name; //Entity's Name
+    public String name; //Entity's Name
     Location location;
     Texture tex;
-    int health;
 
-    //Animation main;
+    int maxHealth;
+    int health;
+    int level = 1;
+    int exp = 0;
+
+    int attack = 1;
+    int defense = 2;
+    int vitality = 1;
+    int skill = 1;
+
     Animation[] Animations;
     int currentAnimation = 0;
     String[] AnimationsNames;
 
-    public void damage(int dmg) {health -= dmg;}
+    public void calcStats() {
+        int newLevel = (exp / 10) + 1;
+        if(newLevel > level){
+            levelUp();
+        }
+
+        maxHealth = vitality * 10;
+        health = maxHealth;
+    }
+
+    public int getDamage() {
+        return (int)(attack * 1.5f);
+    }
+    public void damage(int dmg) {
+        health -= Math.ceil(((float)dmg / (float)defense));
+    }
 
     /**
      * This Constructor will Give the Entity a Cartesian Position, an ID Number, and a Name
@@ -56,6 +74,8 @@ public class Entity {
         } catch (FileNotFoundException e) {
             System.out.printf("\nEntity File not Found\n");
         }
+
+        calcStats();
     }
 
     public void loadTexture(String filename) {
@@ -100,5 +120,22 @@ public class Entity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void levelUp() {
+        level++;
+        attack++;
+        defense++;
+        vitality++;
+        skill++;
+
+        calcStats();
+
+        System.out.println(name + " is now level " + level);
+    }
+    public void gainExp(Entity killed) {
+        exp += killed.level * 5;
+
+        calcStats();
     }
 }

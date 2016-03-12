@@ -1,13 +1,10 @@
+/*
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * @author Jack Kurfman
- * @version 3/8/2016.
- */
 public class Audio {
 
     public static final String KAZOO = "Data/Xenoblade_Kazoo.wav";
@@ -42,3 +39,4 @@ public class Audio {
         }
     }
 }
+*/
