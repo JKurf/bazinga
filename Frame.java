@@ -9,12 +9,6 @@ public class Frame {
     }
 
     public Frame(int U1, int V1, int U2, int V2) {
-        /*
-        u1 = (float) U1 / GraphicsClass.getPow2(GraphicsClass.WIDTH);
-        u2 = (float) U2 / GraphicsClass.getPow2(GraphicsClass.WIDTH);
-        v1 = (float) V1 / GraphicsClass.getPow2(GraphicsClass.HEIGHT);
-        v2 = (float) V2 / GraphicsClass.getPow2(GraphicsClass.HEIGHT);
-        */
         u1 = U1;
         u2 = U2;
         v1 = V1;

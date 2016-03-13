@@ -20,6 +20,7 @@ public class Entity {
     int health;
     int level = 1;
     int exp = 0;
+    int expNeeded = 100;
 
     int attack = 1;
     int defense = 2;
@@ -31,20 +32,21 @@ public class Entity {
     String[] AnimationsNames;
 
     public void calcStats() {
-        int newLevel = (exp / 10) + 1;
-        if(newLevel > level){
+        if (canLevel()) {
+            exp -= expNeeded;
             levelUp();
+            expNeeded += Stat.expFunction(level);
         }
 
         maxHealth = vitality * 10;
         health = maxHealth;
     }
 
-    public int getDamage() {
-        return (int)(attack * 1.5f);
+    public float getDamage() {
+        return Stat.attackFunction(attack, 1, 0, 1, 0);
     }
-    public void damage(int dmg) {
-        health -= Math.ceil(((float)dmg / (float)defense));
+    public void damage(float dmg) {
+        health -= (dmg - Stat.defenseFunction(defense, 1, 1, 0));
     }
 
     /**
@@ -124,18 +126,20 @@ public class Entity {
 
     public void levelUp() {
         level++;
-        attack++;
-        defense++;
-        vitality++;
-        skill++;
-
-        calcStats();
-
+        attack = Stat.statFunction(5.0f, level);
+        defense = Stat.statFunction(5.0f, level);
+        vitality = Stat.statFunction(5.0f, level);
+        skill = Stat.statFunction(5.0f, level);
         System.out.println(name + " is now level " + level);
+        calcStats();
+    }
+
+    public boolean canLevel() {
+        return (exp >= expNeeded);
     }
     public void gainExp(Entity killed) {
-        exp += killed.level * 5;
-
+        exp += Stat.expDropFunction(killed.level);
+        System.out.println("Gained: " + Stat.expDropFunction(killed.level) + "exp");
         calcStats();
     }
 }

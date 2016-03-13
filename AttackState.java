@@ -14,7 +14,7 @@ public class AttackState implements IBattleState{
 
     @Override
     public void Execute() {
-        int dmg = a.getDamage();
+        float dmg = a.getDamage();
         b.damage(dmg);
         System.out.println(a.name + " attacks " + b.name + " for " + dmg + " damage.");
         double dmgT = Math.ceil(((float)dmg / (float)b.defense));
