@@ -146,8 +146,10 @@ public class BattleState implements IState {
         int x = Renderer.WIDTH / 2;
         int y = Renderer.HEIGHT / 2;
 
-        graphics.drawText(String.format("ATK:  %d %d", E[0].attack,  E[1].attack), x, y);
-        graphics.drawText(String.format("DEF:  %d %d", E[0].defense, E[1].defense), x, y+=16);
+        graphics.drawText(String.format("VIT:  %d %d", E[0].vitality,   E[1].vitality), x, y);
+        graphics.drawText(String.format("ATK:  %d %d", E[0].attack,     E[1].attack), x, y+=16);
+        graphics.drawText(String.format("DEF:  %d %d", E[0].defense,    E[1].defense), x, y+=16);
+        graphics.drawText(String.format("SKL:  %d %d", E[0].skill,      E[1].skill), x, y+=16);
 
         battleStack.Render(graphics);
 

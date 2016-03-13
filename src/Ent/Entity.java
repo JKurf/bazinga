@@ -43,6 +43,8 @@ public class Entity {
             expNeeded += Stat.expFunction(level);
         }
 
+        statUpdate();
+
         maxHealth = vitality * 10;
         health = maxHealth;
     }
@@ -132,12 +134,19 @@ public class Entity {
         }
     }
 
-    public void levelUp() {
-        level++;
+    private void statUpdate() {
         attack = Stat.statFunction(5.0f, level);
         defense = Stat.statFunction(5.0f, level);
         vitality = Stat.statFunction(5.0f, level);
         skill = Stat.statFunction(5.0f, level);
+    }
+
+    public void levelUp() {
+        level++;
+        /*attack = Stat.statFunction(5.0f, level);
+        defense = Stat.statFunction(5.0f, level);
+        vitality = Stat.statFunction(5.0f, level);
+        skill = Stat.statFunction(5.0f, level);*/
         System.out.println(name + " is now level " + level);
         calcStats();
     }

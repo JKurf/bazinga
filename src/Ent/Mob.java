@@ -21,6 +21,8 @@ public class Mob extends Entity{
         int healthMid = lineScan.nextInt();
         int healthCap = lineScan.nextInt();
         this.health = statFunction(healthStart, healthMid, healthCap);
+
+        calcStats();
     }
 
     private int statFunction(int start, int mid, int cap) {

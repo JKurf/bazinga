@@ -53,6 +53,8 @@ public class WorldState implements IState{
 
     @Override
     public void Update(double elapsedTime) {
+        action = null;
+
         for(int n = 0; n < world.nMobs; n ++) {
             if (!world.mobs[n].alive) {
                 world.mobs[n] = null;
@@ -94,8 +96,6 @@ public class WorldState implements IState{
 
         if(Input.keyPress(GLFW_KEY_P))
             action = "pause";
-        else
-            action = null;
 
         if(track) {
             Camera.x = player.location.xPos();
@@ -109,6 +109,10 @@ public class WorldState implements IState{
             if (Math.sqrt(Math.pow(player.location.xPos() - world.mobs[n].location.xPos(),2) + Math.pow(player.location.yPos() - world.mobs[n].location.yPos(),2)) < 0.75f) {
                         action = "battle:" + Integer.toString(n);
             }
+        }
+
+        if(!player.alive) {
+            action = "dead";
         }
     }
 

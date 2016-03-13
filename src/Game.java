@@ -94,6 +94,9 @@ public class Game {
 
                 SM.Push(battle);
             }
+            if(act.equals("dead")) {
+                SM.Pop();
+            }
         }
     }
 
