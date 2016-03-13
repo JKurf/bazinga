@@ -1,11 +1,10 @@
 package src.States;
 
-import src.Camera;
+import src.Graphics.Camera;
 import src.Ent.Animation;
 import src.Ent.Player;
 import src.Graphics.Renderer;
 import src.Input;
-import src.World;
 
 import static org.lwjgl.glfw.GLFW.*;
 

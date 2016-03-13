@@ -1,4 +1,4 @@
-package src;
+package src.States;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

@@ -2,7 +2,6 @@ package src.States;
 
 import src.Graphics.Renderer;
 import src.Input;
-import src.Menu;
 
 import static org.lwjgl.glfw.GLFW.*;
 

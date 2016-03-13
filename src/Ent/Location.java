@@ -1,6 +1,6 @@
 package src.Ent;
 
-import src.World;
+import src.States.World;
 
 public class Location {
     private float x;

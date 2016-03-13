@@ -9,6 +9,7 @@ import src.*;
 import src.Ent.Entity;
 import src.Ent.Frame;
 import src.Ent.Location;
+import src.States.World;
 
 import java.io.IOException;
 

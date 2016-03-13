@@ -2,13 +2,8 @@ package src.States;
 
 import src.Ent.Animation;
 import src.Ent.Entity;
-import src.Ent.Mob;
-import src.Ent.Player;
 import src.Graphics.Renderer;
 import src.Input;
-import src.Menu;
-
-import java.util.Scanner;
 
 import static org.lwjgl.glfw.GLFW.*;
 
