@@ -126,11 +126,11 @@ public class WorldState implements IState{
         }
 
         graphics.drawText("POSITION!", 0, 0);
-        graphics.drawText(String.format("(%.1f,%.1f)",player.location.xPos(), player.location.yPos()), 0, 8);
+        graphics.drawText(String.format("(%.1f,%.1f)",player.location.xPos(), player.location.yPos()), 0, 16);
 
         String text = world.name;
 
-        graphics.drawText(text, 0, 16);
+        graphics.drawText(text, 0, 32);
         //graphics.highlightTile(player);
 
         //graphics.drawText(String.format("ABC DEF"), graphics.Font, 8, 0, 0, 8.0f, 8.0f);

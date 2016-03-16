@@ -199,7 +199,7 @@ public class Renderer {
                 //draw(sheetx, sheety, sheetx + TILE_WIDTH, sheety + TILE_HEIGHT,
                 //        drawx, drawy, (int)(TILE_WIDTH), (int)(TILE_HEIGHT), TileMap);
                 if(world.clip[j][i])
-                    drawRect(drawx, drawy, TILE_WIDTH, TILE_HEIGHT);
+                    fillRect(drawx, drawy, TILE_WIDTH, TILE_HEIGHT);
             }
         }
     }
@@ -244,7 +244,7 @@ public class Renderer {
 
     }
 
-    public void drawRect(int x, int y, int w, int h) {
+    public void fillRect(int x, int y, int w, int h) {
         // store the current model matrix
         glPushMatrix();
 
@@ -272,6 +272,34 @@ public class Renderer {
         glDisable(GL_BLEND);
 
         // restore the model view matrix to prevent contamination
+        GL11.glPopMatrix();
+    }
+
+    public void drawRectOutline(float x, float y, float w, float h) {
+        // store the current model matrix
+        glPushMatrix();
+
+        glColor3f(1.0f,0.0f,0.0f);
+        glTranslatef(x, y, 0);
+
+
+        // draw a quad textured to match the sprite
+        glBegin(GL11.GL_LINES);
+        {
+            glVertex2f(0, 0);
+            glVertex2f(0, h);
+
+            glVertex2f(0, h);
+            glVertex2f(w, h);
+
+            glVertex2f(w, h);
+            glVertex2f(w, 0);
+
+            glVertex2f(w, 0);
+            glVertex2f(0, 0);
+        }
+        GL11.glEnd();
+
         GL11.glPopMatrix();
     }
 
@@ -349,13 +377,13 @@ public class Renderer {
             float cellY = ( asciiCode / gridSize) * cellSize;
 
             glTexCoord2f(cellX, cellY);
-            glVertex2f(i * w, y);
+            glVertex2f(i * w, 0);
             glTexCoord2f(cellX + cellSize, cellY);
-            glVertex2f(i * w + w, y);
+            glVertex2f(i * w + w, 0);
             glTexCoord2f(cellX + cellSize, cellY + cellSize);
-            glVertex2f(i * w + w, y + h);
+            glVertex2f(i * w + w, h);
             glTexCoord2f(cellX, cellY + cellSize);
-            glVertex2f(i * w, y + h);
+            glVertex2f(i * w, h);
         }
 
         glEnd();
@@ -365,7 +393,7 @@ public class Renderer {
         glPopMatrix();
     }
 
-    public void drawText(String str, float x, float y){
+    public void drawText(String str, float x, float y, boolean highlight){
         float w = 8.0f * 2.0f;
         float h = 8.0f * 2.0f;
 
@@ -373,10 +401,12 @@ public class Renderer {
 
         glPushMatrix();
 
-        glEnable(GL_BLEND);
+        if(!highlight) glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
 
         Font.bind();
+
+        glColor4f(1, 1, 1, 1);
 
         glTranslatef(x, y, 0);
         glBegin(GL_QUADS);
@@ -415,51 +445,8 @@ public class Renderer {
         glPopMatrix();
     }
 
-    public void drawTextMenu(String stra, float x, float y, boolean highlight){
-        float W = 8.0f;
-        float H = 8.0f;
-        int gridSize = 16;
-
-        float w = W * 2.0f;
-        float h = H * 2.0f;
-
-        int L = stra.length();
-
-        String strUp = stra.toUpperCase();
-
-        glPushMatrix();
-
-        if(!highlight)
-            glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE);
-
-        Font.bind();
-
-        glTranslatef(x - L*w/2, y - h/2, 0);
-        glBegin(GL_QUADS);
-
-        for (int i = 0; i < strUp.length(); i++) {
-            int asciiCode = (int) strUp.charAt(i);
-            //int asciiCode = customAscii(strUp.charAt(i));
-            final float cellSize = 1.0f / gridSize;
-            float cellX = ( asciiCode % gridSize) * cellSize;
-            float cellY = ( asciiCode / gridSize) * cellSize;
-
-            glTexCoord2f(cellX, cellY);
-            glVertex2f(i * w, y);
-            glTexCoord2f(cellX + cellSize, cellY);
-            glVertex2f(i * w + w, y);
-            glTexCoord2f(cellX + cellSize, cellY + cellSize);
-            glVertex2f(i * w + w, y + h);
-            glTexCoord2f(cellX, cellY + cellSize);
-            glVertex2f(i * w, y + h);
-        }
-
-        glEnd();
-
-        glDisable(GL_BLEND);
-
-        glPopMatrix();
+    public void drawText(String str, float x, float y){
+        drawText(str, x, y, false);
     }
 
     public void drawLight(float x, float y, float radius) {
