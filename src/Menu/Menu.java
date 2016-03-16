@@ -71,7 +71,7 @@ public class Menu {
         Add(str, MenuItemType.text);
     }
 
-    public void setTyoe (MenuType _type) {
+    public void setType (MenuType _type) {
         type = _type;
         updatePositions();
     }
