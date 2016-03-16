@@ -34,6 +34,7 @@ public class Entity {
     public int currentAnimation = 0;
     public String[] AnimationsNames;
 
+    public float[] spec;
     public boolean player = false;
 
     public void calcStats() {
@@ -67,6 +68,14 @@ public class Entity {
      */
     public Entity(String ID, int x, int y, Direction dir, boolean mob) {
         player = !mob;
+
+        spec = new float[4];
+        for(int n = 0; n < spec.length; n++) {
+            spec[n] = 2.5f;
+        }
+
+        calcStats();
+
         this.location = new Location(x, y, dir);
         String line;
         File file = new File("Data/Entities.txt");
@@ -86,8 +95,6 @@ public class Entity {
         } catch (FileNotFoundException e) {
             System.out.printf("\nEntity File not Found\n");
         }
-
-        calcStats();
     }
 
     public void loadTexture(String filename) {
@@ -135,10 +142,10 @@ public class Entity {
     }
 
     private void statUpdate() {
-        attack = Stat.statFunction(5.0f, level);
-        defense = Stat.statFunction(5.0f, level);
-        vitality = Stat.statFunction(5.0f, level);
-        skill = Stat.statFunction(5.0f, level);
+        attack =    Stat.statFunction(spec[0], level);
+        defense =   Stat.statFunction(spec[1], level);
+        vitality =  Stat.statFunction(spec[2], level);
+        skill =     Stat.statFunction(spec[3], level);
     }
 
     public void levelUp() {

@@ -462,6 +462,42 @@ public class Renderer {
         glPopMatrix();
     }
 
+    public void drawLight(float x, float y, float radius) {
+        glPushMatrix();
+
+        // translate to the right location and prepare to draw
+
+        float X = world2ScreenX(x);
+        float Y = world2ScreenY(y);
+        glTranslatef(0, 0, 0);
+        glColor3f(1,0,0);
+
+        //glEnable(GL_ALPHA_TEST);
+        //glAlphaFunc(GL_NOTEQUAL, 0);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_COLOR, GL_ZERO);
+        //glEnable( GL_POINT_SMOOTH );
+        glPointSize( radius );
+
+
+        // draw a quad textured to match the sprite
+        glBegin(GL11.GL_POINTS);
+        {
+            //for (int n = 0; n < pts.length; n ++) {
+            glVertex2f(X, Y);
+        }
+        GL11.glEnd();
+
+        glDisable(GL_POINT_SMOOTH);
+        glBlendFunc(GL_NONE, GL_NONE);
+        glDisable(GL_BLEND);
+        glDisable(GL_ALPHA_TEST);
+
+        // restore the model view matrix to prevent contamination
+        GL11.glPopMatrix();
+    }
+
     public float world2ScreenX(float x) {
         return ((x - Camera.x)*TILE_WIDTH*zoom + WIDTH/2);
     }

@@ -134,6 +134,8 @@ public class WorldState implements IState{
         //graphics.highlightTile(player);
 
         //graphics.drawText(String.format("ABC DEF"), graphics.Font, 8, 0, 0, 8.0f, 8.0f);
+
+        //graphics.drawLight(player.location.xPos(), player.location.yPos(), 50);
     }
 
     @Override
