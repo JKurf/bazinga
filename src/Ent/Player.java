@@ -1,10 +1,7 @@
 package src.Ent;
 
-import src.Items.*;
-
 public class Player extends Entity {
     public int dosh;
-    //public Item weapon = new Item("file");
 
     public Player(String ID, int x, int y, Direction dir, boolean mob) {
         super(ID, x, y, dir, mob);
