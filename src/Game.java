@@ -36,13 +36,15 @@ public class Game {
             "start game",
             "quit"
     });
-    
+
     WorldState[] worlds;
     int world = 0;
     int numWorlds = 0;
 
     public void Init() {
         graphics.Init();
+
+        //mainMenu.root.setPos(Renderer.WIDTH/2, Renderer.HEIGHT/2);
 
         loadWorlds("Data/WorldFiles/Worlds.json");
 
@@ -54,9 +56,6 @@ public class Game {
         if(Input.isKeyDown(GLFW_KEY_Q) || Input.isKeyDown(GLFW_KEY_ESCAPE)) {
             glfwSetWindowShouldClose(graphics.getWindow(), GLFW_TRUE);
         }
-        //if(Input.keyPress(GLFW_KEY_G)) {
-        //    Audio.play(Audio.GIRUGAMESH);
-        //}
 
         String act = SM.Update(elapsedTime);
         if(act != null) {

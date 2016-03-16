@@ -4,6 +4,10 @@ import src.Ent.Animation;
 import src.Ent.Entity;
 import src.Graphics.Renderer;
 import src.Input;
+import src.Menu.Menu;
+import src.Menu.MenuAlign;
+import src.Menu.MenuItemType;
+import src.Menu.MenuType;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -14,6 +18,8 @@ public class BattleState implements IState {
     public BattleStack battleStack;
 
     private Menu root;
+
+    private Menu info;
 
     private Entity[] E;
     private boolean current = false;
@@ -28,10 +34,7 @@ public class BattleState implements IState {
         E[1].currentAnimation = Animation.LEFT;
 
         root = new Menu();
-
-        root.setType(1);
-        root.Add("attack");
-        root.Add("info");
+        info = new Menu();
 
         battleStack = new BattleStack();
     }
@@ -41,12 +44,34 @@ public class BattleState implements IState {
         if(!Initialized) {
             Initialized = true;
             battleStack.Pop();
+
+            root.Init();
+
+            root.Add("attack");
+            root.Add("back");
+
+            root.setPos(MenuAlign.center);
+
+            info.Init();
+            info.setPos(Renderer.WIDTH/2 + 128, Renderer.HEIGHT/2, MenuAlign.center);
+            info.setFocus(false);
+
+            info.Add("nop");
+            info.Add("nop");
+            info.items[0].sendData(new String[] {
+                    String.format("atk %d", E[0].attack)
+            });
+
+            info.items[1].sendData(new String[] {
+                    String.format("atk %d", E[0].defense)
+            });
         }
-        //Audio.play(Audio.KAZOO);
     }
 
     @Override
     public void Update(double elapsedTime) {
+        info.Update(elapsedTime);
+
         Entity E1 = E[( current) ? 1 : 0];
         Entity E2 = E[(!current) ? 1 : 0];
 
@@ -72,16 +97,10 @@ public class BattleState implements IState {
                 swap = false;
             }
 
-            if (Input.keyPress(GLFW_KEY_W)) {
-                root.active--;
-            } else if (Input.keyPress(GLFW_KEY_S)) {
-                root.active++;
-            } else if (Input.keyPress(GLFW_KEY_D)) {
-                action = root.items[root.active].contents;
-            }
+            action = root.Update(elapsedTime);
 
-            if(root.active < 0) root.active = root.n-1;
-            if(root.active > root.n-1) root.active = 0;
+            if(root.active < 0) root.active = root.size-1;
+            if(root.active > root.size-1) root.active = 0;
         } else {
             if(swap) {
                 System.out.println(E1.name + "'s Turn");
@@ -106,11 +125,9 @@ public class BattleState implements IState {
                     swap = true;
                 }
             }
-            if (action.equals("info")) {
-                if (battleStack.mStack.isEmpty()) {
-                    BattleStatState info = new BattleStatState();
-                    battleStack.Push(info, E1, E2);
-                }
+            if (action.equals("back")) {
+                E2.alive = false;
+                E1.gainExp(E2);
             }
         }
 
@@ -143,6 +160,7 @@ public class BattleState implements IState {
         graphics.drawText(String.format("Lvl: %d", E[0].level), Renderer.TILE_WIDTH*Z* Renderer.zoom, 16.0f);
         graphics.drawText(String.format("Lvl: %d", E[1].level), Renderer.WIDTH - Renderer.TILE_WIDTH*Z* Renderer.zoom - E[1].name.length() * 16.0f, 16.0f);
 
+        /*
         int x = Renderer.WIDTH / 2;
         int y = Renderer.HEIGHT / 2;
 
@@ -150,10 +168,12 @@ public class BattleState implements IState {
         graphics.drawText(String.format("ATK:  %d %d", E[0].attack,     E[1].attack), x, y+=16);
         graphics.drawText(String.format("DEF:  %d %d", E[0].defense,    E[1].defense), x, y+=16);
         graphics.drawText(String.format("SKL:  %d %d", E[0].skill,      E[1].skill), x, y+=16);
+        */
 
         battleStack.Render(graphics);
 
         root.Render(graphics);
+        info.Render(graphics);
     }
 
     @Override
