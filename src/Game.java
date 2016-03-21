@@ -6,10 +6,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import src.Ent.Mob;
 import src.Graphics.Renderer;
-import src.States.BattleState;
-import src.States.MenuState;
-import src.States.StateStack;
-import src.States.WorldState;
+import src.Menu.MenuItemType;
+import src.States.*;
 
 import java.io.FileReader;
 import java.util.List;
@@ -21,7 +19,7 @@ public class Game {
     MenuState pause = new MenuState(new String[] {
             "resume",
             "settings",
-            "change world",
+            "opt:world",
             "quit"
     });
 
@@ -47,6 +45,17 @@ public class Game {
         //mainMenu.root.setPos(Renderer.WIDTH/2, Renderer.HEIGHT/2);
 
         loadWorlds("Data/WorldFiles/Worlds.json");
+        String[] opts = new String[worlds.length + 1];
+        opts[0] = "current world";
+
+        for(int n = 1; n < opts.length; n ++)  {
+            opts[n] = worlds[n-1].world.name;
+        }
+        pause.Init();
+        pause.root.items[2].sendData(opts);
+
+        mainMenu.Init();
+        mainMenu.root.Add("name", MenuItemType.entry);
 
         SM.Push(mainMenu);
     }
@@ -70,6 +79,8 @@ public class Game {
             }
             if(act.equals("resume")) {
                 SM.Pop();
+                //SM.Pop();
+
             }
             if(act.equals("settings")) {
                 SM.Push(settings);

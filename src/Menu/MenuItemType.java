@@ -5,5 +5,7 @@ package src.Menu;
  */
 public enum MenuItemType {
     text,
-    option
+    option,
+    subMenu,
+    entry
 }

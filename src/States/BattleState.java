@@ -4,10 +4,7 @@ import src.Ent.Animation;
 import src.Ent.Entity;
 import src.Graphics.Renderer;
 import src.Input;
-import src.Menu.Menu;
-import src.Menu.MenuAlign;
-import src.Menu.MenuItemType;
-import src.Menu.MenuType;
+import src.Menu.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -48,7 +45,15 @@ public class BattleState implements IState {
             root.Init();
 
             root.Add("attack");
-            root.Add("back");
+            root.Add("kill");
+            root.Add("options:a,b,back", MenuItemType.subMenu);
+            root.Add("sound", MenuItemType.option);
+            root.items[root.size-1].sendData( new String[] {
+                    "sounds",
+                    "loud",
+                    "quiet",
+                    "supah loud"
+            });
 
             root.setPos(MenuAlign.center);
 
@@ -83,7 +88,7 @@ public class BattleState implements IState {
         if(battleAction == null) {
             battleAction = "-";
         }
-        if(battleAction.equals("back")) {
+        if(battleAction.equals("kill")) {
             battleStack.Pop();
         }
         if (battleAction.equals("execute")) {
@@ -125,9 +130,10 @@ public class BattleState implements IState {
                     swap = true;
                 }
             }
-            if (action.equals("back")) {
+            if (action.equals("kill")) {
                 E2.alive = false;
                 E1.gainExp(E2);
+                action = "back";
             }
         }
 

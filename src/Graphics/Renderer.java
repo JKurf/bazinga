@@ -410,9 +410,29 @@ public class Renderer {
 
         glTranslatef(x, y, 0);
         glBegin(GL_QUADS);
+        int skip = 0;
 
         for (int i = 0; i < strUp.length(); i++) {
             int asciiCode = (int) strUp.charAt(i);
+
+            if (asciiCode == (int) ('<')) {
+                i++;
+                skip++;
+                glColor4f(1, 0, 0, 1);
+            }
+
+            if (i >= strUp.length()) continue;
+            asciiCode = (int) strUp.charAt(i);
+
+            if (asciiCode == (int) ('>')) {
+                i++;
+                skip++;
+                glColor4f(1, 1, 1, 1);
+            }
+
+            if (i >= strUp.length()) continue;
+            asciiCode = (int) strUp.charAt(i);
+
             final float cellSize = 1.0f / 16;
             float cellX = ( asciiCode % 16) * cellSize;
             float cellY = ( asciiCode / 16) * cellSize;
@@ -428,14 +448,16 @@ public class Renderer {
             glVertex2f(i * w / 3, y + h);
             */
 
+            int I = i - skip;
+
             glTexCoord2f(cellX, cellY);
-            glVertex2f(i * w, 0);
+            glVertex2f(I * w, 0);
             glTexCoord2f(cellX + cellSize, cellY);
-            glVertex2f(i * w + w, 0);
+            glVertex2f(I * w + w, 0);
             glTexCoord2f(cellX + cellSize, cellY + cellSize);
-            glVertex2f(i * w + w, h);
+            glVertex2f(I * w + w, h);
             glTexCoord2f(cellX, cellY + cellSize);
-            glVertex2f(i * w, h);
+            glVertex2f(I * w, h);
         }
 
         glEnd();
