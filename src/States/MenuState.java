@@ -3,6 +3,7 @@ package src.States;
 import src.Graphics.Renderer;
 import src.Input;
 import src.Menu.Menu;
+import src.Menu.MenuItemType;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -18,9 +19,6 @@ public class MenuState implements IState {
 
     public MenuState(String[] a) {
         A = a;
-        /*for(int n = 0; n < A.length; n ++) {
-            root.Add(A[n]);
-        }*/
     }
 
     @Override
@@ -29,9 +27,12 @@ public class MenuState implements IState {
         if(!initialized) {
             root.Init();
 
-            //for(int n = 0; n < A.length; n ++) {
             for(String n : A) {
-                root.Add(n);
+                if (n.startsWith("opt")) {
+                    root.Add(n.substring(4), MenuItemType.option);
+                } else {
+                    root.Add(n, MenuItemType.text);
+                }
             }
 
             initialized = true;

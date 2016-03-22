@@ -5,7 +5,7 @@ import src.Input;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class MenuOption implements MenuItem {
-    String contents;
+    String contents = "null";
     private float xPos;
     private float yPos;
 
@@ -18,14 +18,14 @@ public class MenuOption implements MenuItem {
 
     @Override
     public void update(boolean _active) {
-        if(_active) {
+        /*if(_active) {
             if(Input.keyPress(GLFW_KEY_D)) {
                 option++;
             }
         }
 
         if(option > options.length-1) option = 0;
-        if(option < 0) option = options.length-1;
+        if(option < 0) option = options.length-1;*/
 
     }
 
@@ -41,7 +41,15 @@ public class MenuOption implements MenuItem {
 
     @Override
     public String getContents() {
-        return contents != null ? contents : "null";
+        option++;
+        if(option > options.length-1) option = 0;
+        if(option < 0) option = options.length-1;
+
+        if(contents != null) {
+            return "cvar:" + contents + "|" + options[option];
+        }
+
+        return "null";
     }
 
     @Override
@@ -51,7 +59,12 @@ public class MenuOption implements MenuItem {
 
     @Override
     public void sendData(String[] _data) {
+        int num = _data.length - 1;
+
         contents = _data[0];
+
+        options = new String[num];
+
         for(int n = 0; n < _data.length-1; n ++) {
             options[n] = _data[n+1];
         }
@@ -66,7 +79,7 @@ public class MenuOption implements MenuItem {
     @Override
     public float getSize() {
         if(contents != null)
-            return (contents.length() * 16.0f);
+            return (contents.length() + 2 + options[option].length()) * 16.0f;
         else return 0;
     }
 }
